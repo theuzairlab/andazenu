@@ -1,95 +1,117 @@
-# HeroTag Website Clone
+Andaze Nu – E-Commerce Platform for Tracksuits & Shirts
+Built with Next.js and Tailwind CSS
 
-This is a clone of the HeroTag website built with Next.js and Tailwind CSS.
+Andaze Nu is a modern, responsive e-commerce platform for selling tracksuits and shirts online. Inspired by HeroTag and rebuilt from the ground up using Next.js (App Router) and Tailwind CSS, this platform provides a smooth user experience, clean design, and secure user authentication.
 
-## Features
+🌟 Features
+✅ Fully responsive design – optimized for mobile, tablet, and desktop
 
-- Responsive design that works on mobile, tablet, and desktop
-- Interactive components like sliders and product cards
-- Complete UI implementation matching the original HeroTag website
-- Data pulled from a centralized data.json file
+🛍️ Interactive product UI with sliders and product cards
 
-## Authentication System
+🎨 Clean, minimal UI modeled on HeroTag with unique enhancements for Andaze Nu
 
-This project implements a secure authentication system with the following features:
+🗃️ Centralized product data loaded from data.json (mock)
 
-- Email-based OTP (One-Time Password) authentication
-- Secure HTTP-only cookies for maintaining session state
-- No sensitive data stored in localStorage or client-side storage
-- Server-side session validation via middleware
-- Role-based access control (admin vs regular user)
-- Automatic redirection based on user roles
+🛒 User-friendly layout for exploring, browsing, and purchasing apparel
 
-The authentication flow works as follows:
+🔐 Secure authentication using email-based OTP
 
-1. User enters their email and requests an OTP
-2. System sends a 6-digit OTP to the user's email
-3. User enters the OTP and the system verifies it
-4. If valid, the system creates an HTTP-only cookie with the user's session data
-5. The cookie is sent with every request and validated by middleware
-6. Different routes are protected based on user roles
+🎯 Role-based admin and user control for managing content and products
 
-This approach is more secure than localStorage-based authentication as it prevents:
-- XSS attacks from accessing the authentication token
-- Client-side token exposure
-- Token theft from browser storage
+🔐 Authentication System
+Andaze Nu includes a secure, server-side session-based authentication flow using email OTPs:
 
-## Getting Started
+Users enter their email address to request an OTP
 
-First, install the dependencies:
+A 6-digit OTP is emailed to them
 
-```bash
+Upon successful verification, a secure HTTP-only cookie is issued
+
+Middleware verifies user sessions on each request
+
+Role-based access (e.g. admin panel) is enforced with redirection logic
+
+✅ Security Benefits
+No data stored in localStorage (protection against XSS)
+
+Session managed securely via HTTP-only cookies
+
+Prevents token leakage or hijacking
+
+🚀 Getting Started
+Install dependencies:
+
+bash
+Copy
+Edit
 npm install
 # or
 yarn install
 # or
 pnpm install
-```
+Run the development server:
 
-Then, run the development server:
-
-```bash
+bash
+Copy
+Edit
 npm run dev
 # or
 yarn dev
 # or
 pnpm dev
-```
+Open http://localhost:3000 to view the app.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+📁 Project Structure
+csharp
+Copy
+Edit
+.
+├── app/
+│   ├── components/         # Reusable React components
+│   ├── layout.tsx          # Global layout
+│   └── page.tsx            # Main home page
+├── public/
+│   ├── data.json           # Sample product data
+│   └── images/             # Static assets
+├── styles/
+│   └── globals.css         # Global Tailwind styles
+🧩 Core Components
+Navbar – Responsive navigation with mobile toggle
 
-## Project Structure
+HeroSlider – Full-width hero banner with carousel
 
-- `app/` - The main application code
-  - `components/` - React components used throughout the application
-  - `globals.css` - Global CSS styles
-  - `layout.tsx` - Root layout component
-  - `page.tsx` - Main page component
-- `public/` - Static assets
-  - `data.json` - Centralized data for the website
-  - `images/` - Image assets
+Collections – Categories for quick navigation
 
-## Components
+BestSelling – Showcase of top-selling tracksuits/shirts
 
-- `Navbar` - Navigation bar with mobile responsiveness
-- `HeroSlider` - Hero section with image slider
-- `Collections` - Collection categories display
-- `BestSelling` - Best selling products slider
-- `FeaturedProducts` - Featured products grid
-- `KidsSection` - Kids products slider
-- `Footer` - Website footer with information and newsletter signup
+FeaturedProducts – Highlighted product grid
 
-## Notes
+KidsSection – Products for kids (optional section)
 
-This is a clone of the HeroTag website for educational purposes. In a production environment, you would want to:
+Footer – Store info, policies, and newsletter signup
 
-1. Replace placeholder images with real images
-2. Connect to a real backend API for product data
-3. Implement actual functionality for search, cart, and user authentication
+📌 To-Do for Production
+This is a prototype/educational build. For production deployment, consider:
 
-## Learn More
+Connecting to a real backend (e.g., Node.js, Supabase, Firebase)
 
-To learn more about Next.js and Tailwind CSS, take a look at the following resources:
+Integrating real product management + checkout flow
 
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+Adding cart, wishlist, and search functionalities
+
+Replacing mock data/images with actual content
+
+Enabling admin panel for sellers to upload products
+
+📚 Learn More
+Next.js Documentation
+
+Tailwind CSS Docs
+
+Deploying on Vercel
+
+📸 Screenshots
+Coming Soon
+
+📢 License & Attribution
+This is an educational project inspired by HeroTag's layout. All assets used are for demonstration purposes only. For commercial deployment, ensure proper licensing for images and assets.
