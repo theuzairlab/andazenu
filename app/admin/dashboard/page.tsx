@@ -196,7 +196,9 @@ export default function AdminDashboard() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-600">Revenue</p>
-                  <p className="text-2xl font-semibold">{formatCurrency(stats?.totalRevenue || 0)}</p>
+                  <p className="text-2xl font-semibold">
+                    {formatCurrency(stats?.totalRevenue || 0)}
+                  </p>
                 </div>
               </div>
             </div>
@@ -237,7 +239,7 @@ export default function AdminDashboard() {
                         </tr>
                       </thead>
                       <tbody>
-                        {recentOrders.map((order) => (
+                        {recentOrders.map(order => (
                           <tr key={order.id} className="hover:bg-gray-50">
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
                               <Link href={`/admin/orders/${order.id}`}>
@@ -291,7 +293,9 @@ export default function AdminDashboard() {
                           </span>
                           <span className="text-sm text-gray-700">{product.name}</span>
                         </div>
-                        <span className="text-sm font-medium text-gray-900">{product.soldCount} sold</span>
+                        <span className="text-sm font-medium text-gray-900">
+                          {product.soldCount} sold
+                        </span>
                       </li>
                     ))}
                   </ul>
@@ -306,6 +310,26 @@ export default function AdminDashboard() {
       <div className="bg-white p-6 rounded-lg shadow-sm">
         <h2 className="text-lg font-medium mb-4">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Link
+            href="/admin/categories"
+            className="flex items-center justify-center p-4 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 transition"
+          >
+            <svg
+              className="h-5 w-5 mr-2"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+              />
+            </svg>
+            Manage Collections
+          </Link>
           <Link
             href="/admin/products/new"
             className="flex items-center justify-center p-4 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition"
@@ -346,28 +370,8 @@ export default function AdminDashboard() {
             </svg>
             Manage Orders
           </Link>
-          <Link
-            href="/admin/products"
-            className="flex items-center justify-center p-4 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 transition"
-          >
-            <svg
-              className="h-5 w-5 mr-2"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-              />
-            </svg>
-            Manage Products
-          </Link>
         </div>
       </div>
     </div>
   );
-} 
+}

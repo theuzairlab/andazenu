@@ -5,17 +5,26 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- Added `ensureProductPrice` utility function to ensure products always have a valid numeric `sellingPrice`
 
-### Fixed
-- Fixed issue where order items were showing "Rs.0" as price despite correct order totals
+- Added `ensureProductPrice` utility function to ensure products always have a valid numeric `sellingPrice`
+- Implemented contact form reply email functionality in admin dashboard
+  - New API route for sending emails to contact form submitters
+  - Support for default and custom email messages
+  - Automatic status update for contact entries
+- Created comprehensive privacy policy page with detailed sections
+- Implemented responsive design for privacy policy
+- Added interactive elements like email and website links
+
+### Changed
+
+- Updated contact form workflow to include email reply mechanism
 - Updated price handling in cart and checkout to properly calculate prices from numeric values
 - Improved price extraction from formatted price strings when numeric values are missing
 - Created `ARCHITECTURE_BLUEPRINT.md` to document the project structure
 - Created `CHANGELOG.md` to track changes to the project
 - Updated `TODO.md` with comprehensive phased development plan
 - Set up ESLint and Prettier with configuration files (.eslintrc.json and .prettierrc)
-- Verified absolute imports (@/*) are properly configured in tsconfig.json
+- Verified absolute imports (@/\*) are properly configured in tsconfig.json
 - Installed Prisma and set up database schema with models for User, OTPToken, Product, Order, and OrderItem
 - Implemented Resend email service for OTP authentication
 - Added API routes for sending and verifying OTP
@@ -78,8 +87,12 @@ All notable changes to this project will be documented in this file.
 - Updated admin dashboard to display real-time data instead of sample data
 - Created API endpoints for fetching dashboard statistics and order data
 - Added authentication checks to all admin API endpoints
+- Updated Footer component to dynamically render social media links from database settings
+- Improved social media link rendering with conditional display
+- Added security attributes to social media links
 
 ### Fixed
+
 - Fixed OTP email sending by replacing upsert with findFirst + update/create pattern
 - Improved error handling in AuthModal component for better user feedback
 - Fixed modal background opacity issues by separating backdrop and modal elements
@@ -91,8 +104,11 @@ All notable changes to this project will be documented in this file.
 - Resolved radio button warnings in checkout form by adding onChange handlers
 - Fixed order creation by using a valid enum value ('PROCESSING' instead of 'CONFIRMED') for order status
 - Fixed order confirmation email sending by updating the email configuration
+- Improved email sending error handling
+- Ensured proper authentication for email sending endpoint
 
 ### Improved
+
 - Enhanced AuthModal with smooth animations and transitions
 - Added click-outside-to-close functionality for the auth modal
 - Prevented body scrolling when modal is open
@@ -113,12 +129,18 @@ All notable changes to this project will be documented in this file.
 - Simplified checkout flow by removing multi-step process for better user experience
 - Enhanced email notifications with detailed order information and login instructions
 - Improved user session handling during checkout with secure cookies
+- Enhanced contact form reply email route with comprehensive error handling
+- Added detailed logging for email sending attempts
+- Improved email sending validation and error reporting
+- Ensured email is sent before updating contact status
+- Added more granular error responses for email sending failures
 
 ## Project Structure
+
 - Analyzed initial project structure with Next.js 15.3.1 and React 19
 - Documented existing components in the components directory
 - Documented current routing structure in the app directory
 - Identified completed tasks in Phase 1 of development (Next.js setup, Tailwind CSS, file structure)
-- Completed Phase 1: all setup and planning tasks are now done 
-- Completed Phase 3 tasks: displaying real products and implementing color switching functionality 
-- Completed Phase 5 tasks: checkout and OTP verification for orders 
+- Completed Phase 1: all setup and planning tasks are now done
+- Completed Phase 3 tasks: displaying real products and implementing color switching functionality
+- Completed Phase 5 tasks: checkout and OTP verification for orders

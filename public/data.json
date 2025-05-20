@@ -101,7 +101,18 @@
       "salePrice": "Rs.1,395.00",
       "regularPrice": "Rs.2,295.00",
       "discount": "-39%",
-      "colors": ["black", "white", "maroon", "blue", "red", "sky-blue", "gray", "yellow", "navy", "olive"]
+      "colors": [
+        "black",
+        "white",
+        "maroon",
+        "blue",
+        "red",
+        "sky-blue",
+        "gray",
+        "yellow",
+        "navy",
+        "olive"
+      ]
     },
     {
       "id": 3,
@@ -139,7 +150,18 @@
       "salePrice": "Rs.1,295.00",
       "regularPrice": "Rs.1,595.00",
       "discount": "-19%",
-      "colors": ["white", "sky-blue", "yellow", "beige", "green", "purple", "yellow", "orange", "pink", "red"]
+      "colors": [
+        "white",
+        "sky-blue",
+        "yellow",
+        "beige",
+        "green",
+        "purple",
+        "yellow",
+        "orange",
+        "pink",
+        "red"
+      ]
     },
     {
       "id": 2,
@@ -148,7 +170,18 @@
       "salePrice": "Rs.1,295.00",
       "regularPrice": "Rs.1,595.00",
       "discount": "-19%",
-      "colors": ["black", "navy", "white", "yellow", "green", "maroon", "blue", "pink", "orange", "red"]
+      "colors": [
+        "black",
+        "navy",
+        "white",
+        "yellow",
+        "green",
+        "maroon",
+        "blue",
+        "pink",
+        "orange",
+        "red"
+      ]
     },
     {
       "id": 3,
@@ -157,7 +190,19 @@
       "salePrice": "Rs.1,295.00",
       "regularPrice": "Rs.1,595.00",
       "discount": "-19%",
-      "colors": ["black", "navy", "white", "blue", "maroon", "yellow", "green", "red", "light-green", "sky-blue", "orange"]
+      "colors": [
+        "black",
+        "navy",
+        "white",
+        "blue",
+        "maroon",
+        "yellow",
+        "green",
+        "red",
+        "light-green",
+        "sky-blue",
+        "orange"
+      ]
     },
     {
       "id": 4,
@@ -166,7 +211,19 @@
       "salePrice": "Rs.1,295.00",
       "regularPrice": "Rs.1,595.00",
       "discount": "-19%",
-      "colors": ["black", "navy", "maroon", "green", "blue", "red", "sky-blue", "light-green", "purple", "yellow", "orange"]
+      "colors": [
+        "black",
+        "navy",
+        "maroon",
+        "green",
+        "blue",
+        "red",
+        "sky-blue",
+        "light-green",
+        "purple",
+        "yellow",
+        "orange"
+      ]
     }
   ],
   "footerInfo": {
@@ -179,18 +236,18 @@
       "email": "info@herotag.pk"
     },
     "quickLinks": [
-      {"title": "Search", "link": "/search"},
-      {"title": "Collections", "link": "/collections"},
-      {"title": "About Us", "link": "/about"},
-      {"title": "Contact", "link": "/contact"},
-      {"title": "Privacy Policy", "link": "/privacy-policy"},
-      {"title": "Returns & Exchanges", "link": "/returns"}
+      { "title": "Search", "link": "/search" },
+      { "title": "Collections", "link": "/collections" },
+      { "title": "About Us", "link": "/about" },
+      { "title": "Contact", "link": "/contact" },
+      { "title": "Privacy Policy", "link": "/privacy-policy" },
+      { "title": "Returns & Exchanges", "link": "/returns" }
     ],
     "socialMedia": [
-      {"platform": "Facebook", "link": "#"},
-      {"platform": "Instagram", "link": "#"},
-      {"platform": "TikTok", "link": "#"},
-      {"platform": "YouTube", "link": "#"}
+      { "platform": "Facebook", "link": "#" },
+      { "platform": "Instagram", "link": "#" },
+      { "platform": "TikTok", "link": "#" },
+      { "platform": "YouTube", "link": "#" }
     ]
   }
-} 
+}

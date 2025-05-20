@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from "react";
-import ClientOnly from "@/components/ClientOnly";
-import ProductCollection, { Product } from "@/components/ProductCollection";
-import { createColorImageMap } from "@/lib/colorUtils";
+import { useState, useEffect } from 'react';
+import ClientOnly from '@/components/ClientOnly';
+import ProductCollection, { Product } from '@/components/ProductCollection';
+import { createColorImageMap } from '@/lib/colorUtils';
 
 export default function KidsCollectionPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -15,24 +15,26 @@ export default function KidsCollectionPage() {
       try {
         setIsLoading(true);
         const response = await fetch('/api/products?collection=KIDS');
-        
+
         if (!response.ok) {
-          throw new Error('Failed to fetch kids\' products');
+          throw new Error("Failed to fetch kids' products");
         }
-        
+
         const data = await response.json();
         setTotalResults(data.length);
-        
+
         // Transform the data to match the Product type
         const formattedProducts = data.map((product: any) => {
           // Calculate discount percentage
-          const discount = product.discount || Math.round(
-            ((product.regularPrice - product.sellingPrice) / product.regularPrice) * 100
-          );
-          
+          const discount =
+            product.discount ||
+            Math.round(
+              ((product.regularPrice - product.sellingPrice) / product.regularPrice) * 100
+            );
+
           // Use our utility function to create the color-to-image mapping
           const colorImageMap = createColorImageMap(product.productColors);
-          
+
           return {
             id: product.id,
             title: product.name,
@@ -43,11 +45,20 @@ export default function KidsCollectionPage() {
             discount: `-${discount}%`,
             colors: product.productColors.map((colorObj: any) => colorObj.color),
             colorImages: colorImageMap,
-            sizes: product.sizes || ['2 - 3Y', '4 - 5Y', '6 - 7Y', '8 - 9Y', '10 - 11Y', '12 - 13Y'],
-            description: product.description || 'Comfortable and stylish clothing designed especially for kids. Made from soft, durable fabric perfect for active children.'
+            sizes: product.sizes || [
+              '2 - 3Y',
+              '4 - 5Y',
+              '6 - 7Y',
+              '8 - 9Y',
+              '10 - 11Y',
+              '12 - 13Y',
+            ],
+            description:
+              product.description ||
+              'Comfortable and stylish clothing designed especially for kids. Made from soft, durable fabric perfect for active children.',
           };
         });
-        
+
         setProducts(formattedProducts);
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -78,4 +89,4 @@ export default function KidsCollectionPage() {
       </div>
     </ClientOnly>
   );
-} 
+}

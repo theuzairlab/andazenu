@@ -6,7 +6,7 @@ export async function GET() {
   try {
     // Get authentication parameters
     const authParams = getAuthenticationParameters();
-    
+
     return NextResponse.json(authParams);
   } catch (error) {
     console.error('Error generating ImageKit authentication parameters:', error);
@@ -15,4 +15,4 @@ export async function GET() {
       { status: 500 }
     );
   }
-} 
+}

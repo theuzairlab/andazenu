@@ -19,13 +19,13 @@ export default function EditProductPage() {
       try {
         setLoading(true);
         setError(null);
-        
+
         const response = await fetch(`/api/products/${id}`);
-        
+
         if (!response.ok) {
           throw new Error('Failed to fetch product');
         }
-        
+
         const data = await response.json();
         setProduct(data);
       } catch (err: any) {
@@ -71,8 +71,8 @@ export default function EditProductPage() {
         <h1 className="text-2xl font-bold">Edit Product</h1>
         <p className="text-gray-600">Update product information</p>
       </div>
-      
+
       <ProductForm initialData={product} isEditing={true} />
     </>
   );
-} 
+}

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import useCart from '@/app/stores/useCart';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
+import { getColorName } from '@/lib/colorUtils';
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -24,13 +25,13 @@ export default function CheckoutPage() {
   const subtotal = getTotalPrice();
   const shipping = subtotal < 5000 ? 250 : 0;
   const total = subtotal + shipping;
-  
+
   // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === 'checkbox' ? checked : value,
     });
   };
 
@@ -44,7 +45,7 @@ export default function CheckoutPage() {
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (items.length === 0) {
       toast.error('Your cart is empty');
       return;
@@ -52,7 +53,7 @@ export default function CheckoutPage() {
 
     try {
       setLoading(true);
-      
+
       const response = await fetch('/api/create-order', {
         method: 'POST',
         headers: {
@@ -68,7 +69,7 @@ export default function CheckoutPage() {
       });
 
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.error || 'Failed to place order');
       }
@@ -76,7 +77,7 @@ export default function CheckoutPage() {
       // Order created successfully
       clearCart(); // Clear the cart
       toast.success('Order placed successfully!');
-      
+
       // Redirect to order confirmation page
       router.push(`/orders`);
     } catch (error) {
@@ -95,7 +96,7 @@ export default function CheckoutPage() {
           <p className="text-gray-600 mb-8">
             Looks like you haven't added any items to your cart yet.
           </p>
-          <Link 
+          <Link
             href="/"
             className="bg-black text-white px-6 py-3 rounded-4xl font-medium hover:bg-gray-800 transition-colors"
           >
@@ -109,7 +110,7 @@ export default function CheckoutPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
       <h1 className="text-3xl font-bold mb-8">Checkout</h1>
-      
+
       <div className="flex flex-col lg:flex-row gap-10">
         {/* Left Column - Customer Information and Shipping */}
         <div className="flex-1">
@@ -128,8 +129,8 @@ export default function CheckoutPage() {
                   required
                 />
               </div>
-              
-              <div className="flex items-center">
+
+              {/* <div className="flex items-center">
                 <input
                   type="checkbox"
                   id="newsletter"
@@ -139,22 +140,22 @@ export default function CheckoutPage() {
                 <label htmlFor="newsletter" className="ml-2 block text-sm text-gray-600">
                   Email me with news and offers
                 </label>
-              </div>
+              </div> */}
             </div>
-            
+
             {/* Delivery Information */}
             <div className="mb-8">
               <h2 className="text-xl font-semibold mb-4">Delivery</h2>
-              
+
               <div className="mb-4">
-                <select 
+                <select
                   className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-black bg-white"
                   defaultValue="Pakistan"
                 >
                   <option value="Pakistan">Pakistan</option>
                 </select>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <input
                   type="text"
@@ -172,7 +173,7 @@ export default function CheckoutPage() {
                   className="p-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-black"
                 />
               </div>
-              
+
               <div className="mb-4">
                 <input
                   type="text"
@@ -184,7 +185,7 @@ export default function CheckoutPage() {
                   required
                 />
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <input
                   type="text"
@@ -204,7 +205,7 @@ export default function CheckoutPage() {
                   className="p-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-black"
                 />
               </div>
-              
+
               <div className="mb-4">
                 <input
                   type="tel"
@@ -216,8 +217,8 @@ export default function CheckoutPage() {
                   required
                 />
               </div>
-              
-              <div className="flex items-center">
+
+              {/* <div className="flex items-center">
                 <input
                   type="checkbox"
                   id="saveInfo"
@@ -229,9 +230,9 @@ export default function CheckoutPage() {
                 <label htmlFor="saveInfo" className="ml-2 block text-sm text-gray-600">
                   Save this information for next time
                 </label>
-              </div>
+              </div> */}
             </div>
-            
+
             {/* Shipping Method */}
             <div className="mb-8">
               <h2 className="text-xl font-semibold mb-4">Shipping method</h2>
@@ -240,12 +241,14 @@ export default function CheckoutPage() {
                 <div className="text-gray-600">Rs {shipping.toLocaleString()}</div>
               </div>
             </div>
-            
+
             {/* Payment Method */}
             <div className="mb-8">
               <h2 className="text-xl font-semibold mb-4">Payment</h2>
-              <p className="text-sm text-gray-500 mb-4">All transactions are secure and encrypted.</p>
-              
+              <p className="text-sm text-gray-500 mb-4">
+                All transactions are secure and encrypted.
+              </p>
+
               <div className="border border-gray-300 rounded p-4 mb-4">
                 <div className="flex items-center">
                   <input
@@ -254,7 +257,7 @@ export default function CheckoutPage() {
                     name="paymentMethod"
                     value="cod"
                     defaultChecked={true}
-                    onChange={() => {}}
+                    onChange={() => { }}
                     className="h-4 w-4 text-black focus:ring-black border-gray-300"
                   />
                   <label htmlFor="cod" className="ml-2 block font-medium text-gray-800">
@@ -263,11 +266,11 @@ export default function CheckoutPage() {
                 </div>
               </div>
             </div>
-            
+
             {/* Billing Address */}
             <div className="mb-8">
               <h2 className="text-xl font-semibold mb-4">Billing address</h2>
-              
+
               <div className="border border-gray-300 rounded p-4 mb-4">
                 <div className="flex items-center">
                   <input
@@ -276,7 +279,7 @@ export default function CheckoutPage() {
                     name="billingAddress"
                     value="same"
                     defaultChecked={true}
-                    onChange={() => {}}
+                    onChange={() => { }}
                     className="h-4 w-4 text-black focus:ring-black border-gray-300"
                   />
                   <label htmlFor="sameAsShipping" className="ml-2 block font-medium text-gray-800">
@@ -284,7 +287,7 @@ export default function CheckoutPage() {
                   </label>
                 </div>
               </div>
-              
+
               <div className="border border-gray-300 rounded p-4">
                 <div className="flex items-center">
                   <input
@@ -295,13 +298,16 @@ export default function CheckoutPage() {
                     disabled
                     className="h-4 w-4 text-gray-400 focus:ring-black border-gray-300"
                   />
-                  <label htmlFor="differentBilling" className="ml-2 block font-medium text-gray-400">
+                  <label
+                    htmlFor="differentBilling"
+                    className="ml-2 block font-medium text-gray-400"
+                  >
                     Use a different billing address
                   </label>
                 </div>
               </div>
             </div>
-            
+
             {/* Submit button (Mobile Only) */}
             <button
               type="submit"
@@ -312,17 +318,20 @@ export default function CheckoutPage() {
             </button>
           </form>
         </div>
-        
+
         {/* Right Column - Order Summary */}
         <div className="w-full lg:w-1/3">
           <div className="bg-gray-50 p-6 rounded-lg">
             {/* Cart Items */}
             <div className="space-y-4 mb-6">
               {items.map((item, index) => (
-                <div key={`${item.product.id}-${item.color}-${item.size}-${index}`} className="flex">
+                <div
+                  key={`${item.product.id}-${item.color}-${item.size}-${index}`}
+                  className="flex"
+                >
                   <div className="relative">
                     <div className="bg-white w-20 h-20 border rounded overflow-hidden">
-                      <img 
+                      <img
                         src={item.product.colorImages?.[item.color] || item.product.image}
                         alt={item.product.title}
                         className="w-full h-full object-cover object-center"
@@ -332,27 +341,34 @@ export default function CheckoutPage() {
                       {item.quantity}
                     </span>
                   </div>
-                  
-                  <div className="ml-4 flex-1">
+
+                  <div className="ml-4 flex-1 mt-[-8px]">
                     <h3 className="font-medium text-sm">{item.product.title}</h3>
-                    <div className="text-sm text-gray-500">
-                      {item.color} / {item.size}
+                    <div className="text-sm text-gray-500 mt-1 flex items-center gap-1">
+                      <span className="font-semibold">Color: </span>
+                      <span
+                        className="inline-block w-3 h-3 rounded-full mr-1"
+                        style={{ backgroundColor: item.color }}
+                      ></span>
+                      {getColorName(item.color)}
                     </div>
-                    <div className="font-medium">
-                      {item.product.salePrice}
+
+                    <div className="text-sm text-gray-500 mt-1 flex items-center gap-1">
+                      <span className="font-semibold">Size: </span> {item.size}
                     </div>
+                    <div className="font-medium">{item.product.salePrice}</div>
                   </div>
                 </div>
               ))}
             </div>
-            
+
             {/* Discount Code */}
             <div className="border-t border-b py-4 mb-4">
               <div className="flex">
                 <input
                   type="text"
                   value={discountCode}
-                  onChange={(e) => setDiscountCode(e.target.value)}
+                  onChange={e => setDiscountCode(e.target.value)}
                   placeholder="Discount code"
                   className="flex-1 p-2 border border-gray-300 rounded-l focus:outline-none focus:ring-1 focus:ring-black"
                 />
@@ -364,7 +380,7 @@ export default function CheckoutPage() {
                 </button>
               </div>
             </div>
-            
+
             {/* Order Summary */}
             <div className="space-y-2 mb-6">
               <div className="flex justify-between">
@@ -380,7 +396,7 @@ export default function CheckoutPage() {
                 <span>Rs {total.toLocaleString()}</span>
               </div>
             </div>
-            
+
             {/* Submit Button (Desktop Only) */}
             <button
               onClick={handleSubmit}
@@ -394,4 +410,4 @@ export default function CheckoutPage() {
       </div>
     </div>
   );
-} 
+}

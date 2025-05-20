@@ -16,33 +16,33 @@ export async function auth(): Promise<UserSession> {
   try {
     const cookieStore = await cookies();
     const authCookie = cookieStore.get('auth-server-cookie');
-    
+
     if (!authCookie?.value) {
       return {
         user: null,
-        isAuthenticated: false
+        isAuthenticated: false,
       };
     }
-    
+
     const authData = JSON.parse(authCookie.value);
-    
+
     if (authData.isAuthenticated && authData.user) {
       return {
         user: {
           id: authData.user.id,
           email: authData.user.email,
           name: authData.user.name,
-          isAdmin: authData.user.isAdmin
+          isAdmin: authData.user.isAdmin,
         },
-        isAuthenticated: true
+        isAuthenticated: true,
       };
     }
   } catch (error) {
     console.error('Error parsing auth cookie:', error);
   }
-  
+
   return {
     user: null,
-    isAuthenticated: false
+    isAuthenticated: false,
   };
-} 
+}

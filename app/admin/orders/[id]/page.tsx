@@ -51,11 +51,11 @@ export default function OrderDetailPage() {
     try {
       const response = await fetch(`/api/admin/orders/${orderId}`);
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.error || 'Failed to fetch order details');
       }
-      
+
       setOrder(data.order);
       setNewStatus(data.order.status);
     } catch (error) {
@@ -75,18 +75,18 @@ export default function OrderDetailPage() {
         },
         body: JSON.stringify({ status: newStatus }),
       });
-      
+
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.error || 'Failed to update order status');
       }
-      
+
       // Update local state
       if (order) {
         setOrder({ ...order, status: newStatus as Order['status'] });
       }
-      
+
       toast.success('Order status updated successfully');
     } catch (error) {
       console.error('Error updating order status:', error);
@@ -96,18 +96,18 @@ export default function OrderDetailPage() {
 
   const resendOrderConfirmation = async () => {
     if (!order) return;
-    
+
     try {
       const response = await fetch(`/api/admin/orders/${orderId}/resend-email`, {
         method: 'POST',
       });
-      
+
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.error || 'Failed to resend confirmation email');
       }
-      
+
       toast.success('Order confirmation email sent successfully');
     } catch (error) {
       console.error('Error resending email:', error);
@@ -145,7 +145,9 @@ export default function OrderDetailPage() {
     return (
       <div className="text-center p-8">
         <h2 className="text-2xl font-bold mb-2">Order Not Found</h2>
-        <p className="text-gray-600 mb-4">The order you're looking for doesn't exist or you don't have permission to view it.</p>
+        <p className="text-gray-600 mb-4">
+          The order you're looking for doesn't exist or you don't have permission to view it.
+        </p>
         <button
           onClick={() => router.push('/admin/orders')}
           className="bg-black text-white px-4 py-2 rounded-lg"
@@ -162,7 +164,8 @@ export default function OrderDetailPage() {
         <div>
           <h1 className="text-2xl font-semibold">Order #{order.id.slice(0, 8).toUpperCase()}</h1>
           <p className="text-sm text-gray-500">
-            Placed on {new Date(order.createdAt).toLocaleDateString()} at {new Date(order.createdAt).toLocaleTimeString()}
+            Placed on {new Date(order.createdAt).toLocaleDateString()} at{' '}
+            {new Date(order.createdAt).toLocaleTimeString()}
           </p>
         </div>
         <button
@@ -178,16 +181,18 @@ export default function OrderDetailPage() {
         <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
           <div>
             <h2 className="text-lg font-medium mb-2">Order Status</h2>
-            <span className={`px-3 py-1 inline-flex text-sm font-semibold rounded-full ${getStatusBadgeColor(order.status)}`}>
+            <span
+              className={`px-3 py-1 inline-flex text-sm font-semibold rounded-full ${getStatusBadgeColor(order.status)}`}
+            >
               {order.status}
             </span>
           </div>
-          
+
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="flex items-center">
               <select
                 value={newStatus}
-                onChange={(e) => setNewStatus(e.target.value)}
+                onChange={e => setNewStatus(e.target.value)}
                 className="rounded border border-gray-300 py-2 px-3 mr-2"
               >
                 <option value="PENDING">Pending</option>
@@ -243,25 +248,40 @@ export default function OrderDetailPage() {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Product
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Details
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Price
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Quantity
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Total
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {order.orderItems.map((item) => (
+              {order.orderItems.map(item => (
                 <tr key={item.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">
@@ -269,14 +289,8 @@ export default function OrderDetailPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500">
-                      Size: {item.size}
-                    </div>
-                    {item.color && (
-                      <div className="text-sm text-gray-500">
-                        Color: {item.color}
-                      </div>
-                    )}
+                    <div className="text-sm text-gray-500">Size: {item.size}</div>
+                    {item.color && <div className="text-sm text-gray-500">Color: {item.color}</div>}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {formatPrice(item.price || 0)}
@@ -305,4 +319,4 @@ export default function OrderDetailPage() {
       </div>
     </div>
   );
-} 
+}

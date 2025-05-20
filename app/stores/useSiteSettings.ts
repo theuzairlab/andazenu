@@ -10,60 +10,56 @@ interface SiteSettingsState {
 
 const DEFAULT_SETTINGS: WebsiteSettings = {
   id: 'settings',
-  siteName: 'T-Shirt Store',
+  siteName: 'Andaze Nu',
   logoUrl: null,
   faviconUrl: null,
-  primaryColor: '#000000',
-  secondaryColor: '#ffffff',
   heroSliderImages: [],
-  categoryImages: {},
-  footerText: '© 2023 T-Shirt Store. All rights reserved.',
-  contactEmail: 'contact@example.com',
+  footerText: '© 2023 Andaze Nu. All rights reserved.',
+  contactEmail: 'contact@andazenu.com',
   contactPhone: '+1234567890',
   socialLinks: {},
-  updatedAt: new Date().toISOString()
+  updatedAt: new Date().toISOString(),
 };
 
-const useSiteSettings = create<SiteSettingsState>((set) => ({
+const useSiteSettings = create<SiteSettingsState>(set => ({
   settings: null,
   isLoading: true,
   error: null,
   fetchSettings: async () => {
     try {
       set({ isLoading: true, error: null });
-      
+
       const response = await fetch('/api/settings');
-      
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to fetch settings');
       }
-      
+
       const data = await response.json();
-      
+
       // Parse dates and ensure all properties exist
       const normalizedSettings = {
         ...DEFAULT_SETTINGS,
         ...data,
         updatedAt: data.updatedAt || new Date().toISOString(),
         heroSliderImages: data.heroSliderImages || [],
-        categoryImages: data.categoryImages || {},
-        socialLinks: data.socialLinks || {}
+        socialLinks: data.socialLinks || {},
       };
-      
-      set({ 
-        settings: normalizedSettings, 
-        isLoading: false 
+
+      set({
+        settings: normalizedSettings,
+        isLoading: false,
       });
     } catch (error: any) {
       console.error('Error fetching site settings:', error);
-      set({ 
-        error: error.message || 'Failed to load site settings', 
+      set({
+        error: error.message || 'Failed to load site settings',
         isLoading: false,
-        settings: DEFAULT_SETTINGS
+        settings: DEFAULT_SETTINGS,
       });
     }
-  }
+  },
 }));
 
-export default useSiteSettings; 
+export default useSiteSettings;

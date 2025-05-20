@@ -22,14 +22,46 @@ const colors = [
 
 // Shirt thumbnails for the left sidebar
 const shirtThumbnails = [
-  { id: 1, color: 'Black', image: 'https://herotag.pk/cdn/shop/files/black_25fb3c11-9519-441d-8051-78b21f64efa8.jpg' },
-  { id: 2, color: 'Green', image: 'https://herotag.pk/cdn/shop/files/olive_9e14a57d-4fad-4cef-9f9e-4c71c3ad1381.jpg' },
-  { id: 3, color: 'Navy', image: 'https://herotag.pk/cdn/shop/files/navy_2241fe84-efa8-41b0-901c-78d0e532fab2.jpg' },
-  { id: 4, color: 'Mustard', image: 'https://herotag.pk/cdn/shop/files/mustard_a9a93a11-72bf-4b80-b25b-d24ec3c34c01.jpg' },
-  { id: 5, color: 'Maroon', image: 'https://herotag.pk/cdn/shop/files/maroon_db75ec18-5b8d-4fa0-b122-fc86f04be0e6.jpg' },
-  { id: 6, color: 'White', image: 'https://herotag.pk/cdn/shop/files/white_b6f04254-e81d-4b12-b8fd-4ddb42d1ff1e.jpg' },
-  { id: 7, color: 'Sky Blue', image: 'https://herotag.pk/cdn/shop/files/sky-blue_8afb1b13-1ddf-4c09-a86c-20c9fcee582f.jpg' },
-  { id: 8, color: 'Red', image: 'https://herotag.pk/cdn/shop/files/red_c2c9b887-dbd3-4b17-a1f7-48de5de99e48.jpg' },
+  {
+    id: 1,
+    color: 'Black',
+    image: 'https://herotag.pk/cdn/shop/files/black_25fb3c11-9519-441d-8051-78b21f64efa8.jpg',
+  },
+  {
+    id: 2,
+    color: 'Green',
+    image: 'https://herotag.pk/cdn/shop/files/olive_9e14a57d-4fad-4cef-9f9e-4c71c3ad1381.jpg',
+  },
+  {
+    id: 3,
+    color: 'Navy',
+    image: 'https://herotag.pk/cdn/shop/files/navy_2241fe84-efa8-41b0-901c-78d0e532fab2.jpg',
+  },
+  {
+    id: 4,
+    color: 'Mustard',
+    image: 'https://herotag.pk/cdn/shop/files/mustard_a9a93a11-72bf-4b80-b25b-d24ec3c34c01.jpg',
+  },
+  {
+    id: 5,
+    color: 'Maroon',
+    image: 'https://herotag.pk/cdn/shop/files/maroon_db75ec18-5b8d-4fa0-b122-fc86f04be0e6.jpg',
+  },
+  {
+    id: 6,
+    color: 'White',
+    image: 'https://herotag.pk/cdn/shop/files/white_b6f04254-e81d-4b12-b8fd-4ddb42d1ff1e.jpg',
+  },
+  {
+    id: 7,
+    color: 'Sky Blue',
+    image: 'https://herotag.pk/cdn/shop/files/sky-blue_8afb1b13-1ddf-4c09-a86c-20c9fcee582f.jpg',
+  },
+  {
+    id: 8,
+    color: 'Red',
+    image: 'https://herotag.pk/cdn/shop/files/red_c2c9b887-dbd3-4b17-a1f7-48de5de99e48.jpg',
+  },
 ];
 
 // Related products for People Also Bought section
@@ -37,34 +69,38 @@ const relatedProducts = [
   {
     id: 1,
     name: 'Imagine T-Shirt',
-    image: 'https://herotag.pk/cdn/shop/files/imagine-t-shirt-black-500x500-herotag_5ff3b47c-75a9-4dbe-a888-8c0337c93926.jpg',
+    image:
+      'https://herotag.pk/cdn/shop/files/imagine-t-shirt-black-500x500-herotag_5ff3b47c-75a9-4dbe-a888-8c0337c93926.jpg',
     price: 1395,
     originalPrice: 2195,
-    discount: 36
+    discount: 36,
   },
   {
     id: 2,
     name: 'Original T-Shirt',
-    image: 'https://herotag.pk/cdn/shop/files/original-t-shirt-white-500x500-herotag_79e20e01-ba6d-4f8d-b9a9-04fa86e2fbc4.jpg',
+    image:
+      'https://herotag.pk/cdn/shop/files/original-t-shirt-white-500x500-herotag_79e20e01-ba6d-4f8d-b9a9-04fa86e2fbc4.jpg',
     price: 1395,
     originalPrice: 2195,
-    discount: 36
+    discount: 36,
   },
   {
     id: 3,
     name: 'Perfection T-Shirt',
-    image: 'https://herotag.pk/cdn/shop/files/perfection-t-shirt-black-500x500-herotag_6eb7dee4-5c7b-45ea-8d5d-a90ed15e02d6.jpg',
+    image:
+      'https://herotag.pk/cdn/shop/files/perfection-t-shirt-black-500x500-herotag_6eb7dee4-5c7b-45ea-8d5d-a90ed15e02d6.jpg',
     price: 1395,
     originalPrice: 2195,
-    discount: 36
+    discount: 36,
   },
   {
     id: 4,
     name: 'The Tempt for Greatness T-Shirt',
-    image: 'https://herotag.pk/cdn/shop/files/tempt-for-greatness-t-shirt-black-500x500-herotag_a4736d89-caf5-4ae9-bb5d-87e41169f5ff.jpg',
+    image:
+      'https://herotag.pk/cdn/shop/files/tempt-for-greatness-t-shirt-black-500x500-herotag_a4736d89-caf5-4ae9-bb5d-87e41169f5ff.jpg',
     price: 1395,
     originalPrice: 2195,
-    discount: 36
+    discount: 36,
   },
 ];
 
@@ -94,7 +130,7 @@ export default function CustomDesignPage() {
     }
   };
 
-  const handleThumbnailClick = (thumbnail: typeof shirtThumbnails[0]) => {
+  const handleThumbnailClick = (thumbnail: (typeof shirtThumbnails)[0]) => {
     setSelectedThumbnail(thumbnail);
     setMainImage(thumbnail.image);
   };
@@ -104,7 +140,9 @@ export default function CustomDesignPage() {
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
         <div className="flex items-center text-sm text-gray-500 mb-6">
-          <Link href="/" className="hover:text-gray-700">Home</Link>
+          <Link href="/" className="hover:text-gray-700">
+            Home
+          </Link>
           <span className="mx-2">/</span>
           <span className="font-medium text-gray-700">Men's Custom Design T-Shirt</span>
         </div>
@@ -115,8 +153,8 @@ export default function CustomDesignPage() {
             <div className="flex flex-row gap-4">
               {/* Thumbnails */}
               <div className="w-20 flex flex-col gap-3">
-                {shirtThumbnails.map((thumbnail) => (
-                  <div 
+                {shirtThumbnails.map(thumbnail => (
+                  <div
                     key={thumbnail.id}
                     className={`border ${selectedThumbnail.id === thumbnail.id ? 'border-blue-500' : 'border-gray-200'} cursor-pointer`}
                     onClick={() => handleThumbnailClick(thumbnail)}
@@ -167,17 +205,19 @@ export default function CustomDesignPage() {
             <div className="border-t border-gray-200 py-4">
               <h2 className="text-lg font-semibold mb-4 text-gray-700">Custom Design</h2>
               <p className="text-gray-600 mb-4">
-                Add your name, note or upload your customized idea image to personalise your item. 
+                Add your name, note or upload your customized idea image to personalise your item.
                 Custom items cannot be returned or exchanged.
               </p>
 
               {/* Text Input */}
               <div className="mb-4">
-                <label className="block text-sm font-medium mb-2 text-gray-700">Text (Optional)</label>
-                <input 
-                  type="text" 
+                <label className="block text-sm font-medium mb-2 text-gray-700">
+                  Text (Optional)
+                </label>
+                <input
+                  type="text"
                   value={customText}
-                  onChange={(e) => setCustomText(e.target.value)}
+                  onChange={e => setCustomText(e.target.value)}
                   placeholder="Enter your custom text here"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                 />
@@ -187,19 +227,19 @@ export default function CustomDesignPage() {
               <div className="mb-6">
                 <label className="block text-sm font-medium mb-2 text-gray-700">Design File</label>
                 <div className="relative">
-                  <input 
-                    type="file" 
-                    id="design-file" 
+                  <input
+                    type="file"
+                    id="design-file"
                     className="hidden"
                     onChange={handleFileChange}
                     accept="image/*"
                   />
-                  <label 
+                  <label
                     htmlFor="design-file"
                     className="flex items-center justify-center w-full px-4 py-2 border border-gray-300 rounded-md cursor-pointer hover:border-blue-500"
                   >
                     <Upload className="h-5 w-5 mr-2 text-gray-600" />
-                    {file ? file.name : "Upload your design file"}
+                    {file ? file.name : 'Upload your design file'}
                   </label>
                 </div>
               </div>
@@ -208,8 +248,10 @@ export default function CustomDesignPage() {
             {/* Size Selection */}
             <div className="border-t border-gray-200 py-4">
               <div className="flex justify-between items-center mb-2">
-                <label className="block text-sm font-medium text-gray-700">Size: {selectedSize}</label>
-                <button 
+                <label className="block text-sm font-medium text-gray-700">
+                  Size: {selectedSize}
+                </label>
+                <button
                   className="text-sm text-blue-600 underline"
                   onClick={() => setShowSizeGuide(!showSizeGuide)}
                 >
@@ -266,7 +308,7 @@ export default function CustomDesignPage() {
               )}
 
               <div className="flex flex-wrap gap-2 mb-6">
-                {sizes.map((size) => (
+                {sizes.map(size => (
                   <button
                     key={size}
                     className={`px-4 py-2 border text-sm font-medium ${
@@ -284,15 +326,15 @@ export default function CustomDesignPage() {
 
             {/* Color Selection */}
             <div className="border-t border-gray-200 py-4">
-              <label className="block text-sm font-medium mb-2 text-gray-700">Color: {selectedColor.name}</label>
+              <label className="block text-sm font-medium mb-2 text-gray-700">
+                Color: {selectedColor.name}
+              </label>
               <div className="flex flex-wrap gap-3 mb-6">
-                {colors.map((color) => (
+                {colors.map(color => (
                   <button
                     key={color.id}
                     className={`w-8 h-8 rounded-full ${color.class} ${
-                      selectedColor.id === color.id
-                        ? 'ring-2 ring-offset-2 ring-blue-500'
-                        : ''
+                      selectedColor.id === color.id ? 'ring-2 ring-offset-2 ring-blue-500' : ''
                     }`}
                     onClick={() => setSelectedColor(color)}
                     aria-label={color.name}
@@ -358,10 +400,7 @@ export default function CustomDesignPage() {
             </div>
           </div>
         </div>
-
-        
-        
       </div>
     </ClientOnly>
   );
-} 
+}

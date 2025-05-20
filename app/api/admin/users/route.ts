@@ -7,9 +7,9 @@ async function isAdmin(): Promise<boolean> {
   try {
     const cookieStore = cookies();
     const sessionCookie = cookieStore.get('session');
-    
+
     if (!sessionCookie?.value) return false;
-    
+
     const sessionData = JSON.parse(sessionCookie.value);
     return !!sessionData?.isAdmin;
   } catch (error) {
@@ -24,10 +24,7 @@ export async function GET() {
     // Check if user is an admin
     const adminUser = await isAdmin();
     if (!adminUser) {
-      return NextResponse.json(
-        { error: 'Unauthorized. Admin access required.' },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: 'Unauthorized. Admin access required.' }, { status: 403 });
     }
 
     // Fetch all users with their order counts
@@ -39,12 +36,12 @@ export async function GET() {
         isAdmin: true,
         createdAt: true,
         _count: {
-          select: { orders: true }
-        }
+          select: { orders: true },
+        },
       },
       orderBy: {
-        createdAt: 'desc'
-      }
+        createdAt: 'desc',
+      },
     });
 
     // Format the response
@@ -54,15 +51,12 @@ export async function GET() {
       email: user.email,
       isAdmin: user.isAdmin,
       createdAt: user.createdAt,
-      orderCount: user._count.orders
+      orderCount: user._count.orders,
     }));
 
     return NextResponse.json({ users: formattedUsers });
   } catch (error) {
     console.error('Error retrieving users:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve users' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to retrieve users' }, { status: 500 });
   }
-} 
+}

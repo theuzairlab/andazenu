@@ -16,4 +16,4 @@ declare module 'color-namer' {
 
   function namer(color: string): NamerResult;
   export = namer;
-} 
+}

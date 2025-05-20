@@ -6,10 +6,7 @@ export interface WebsiteSettings {
   siteName: string;
   logoUrl: string | null;
   faviconUrl: string | null;
-  primaryColor: string;
-  secondaryColor: string;
   heroSliderImages: string[] | null;
-  categoryImages: Record<string, string> | null;
   footerText: string;
   contactEmail: string;
   contactPhone: string;
@@ -89,4 +86,4 @@ export interface User {
   isAdmin: boolean;
   createdAt: string;
   orders?: Order[];
-} 
+}

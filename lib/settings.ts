@@ -7,70 +7,82 @@ import { WebsiteSettings } from '@/types';
  */
 export async function getSiteSettings(): Promise<WebsiteSettings | null> {
   try {
-    // Try to get existing settings using raw SQL query
-    let dbSettings = await prisma.$queryRaw`SELECT * FROM "WebsiteSettings" WHERE id = 'settings' LIMIT 1`;
-    
-    // Convert result to a single object if it's an array
-    if (Array.isArray(dbSettings) && dbSettings.length > 0) {
-      const settings = dbSettings[0] as any;
-      
-      // Create a properly typed object from the raw data
+    // Get settings using Prisma model method
+    const dbSettings = await prisma.websiteSettings.findUnique({
+      where: {
+        id: 'settings',
+      },
+    });
+
+    if (dbSettings) {
+      // Create a properly typed object from the data
       const result: WebsiteSettings = {
-        id: settings.id || 'settings',
-        siteName: settings.siteName || 'T-Shirt Store',
-        logoUrl: settings.logoUrl,
-        faviconUrl: settings.faviconUrl,
-        primaryColor: settings.primaryColor || '#000000',
-        secondaryColor: settings.secondaryColor || '#ffffff',
-        footerText: settings.footerText || '© 2023 T-Shirt Store. All rights reserved.',
-        contactEmail: settings.contactEmail || 'contact@example.com',
-        contactPhone: settings.contactPhone || '+1234567890',
-        updatedAt: settings.updatedAt || new Date().toISOString(),
+        id: dbSettings.id || 'settings',
+        siteName: dbSettings.siteName || 'Andaze Nu',
+        logoUrl: dbSettings.logoUrl,
+        faviconUrl: dbSettings.faviconUrl,
+        footerText: dbSettings.footerText || '© 2023 Andaze Nu. All rights reserved.',
+        contactEmail: dbSettings.contactEmail || 'contact@andazenu.com',
+        contactPhone: dbSettings.contactPhone || '+1234567890',
+        updatedAt: dbSettings.updatedAt.toISOString(),
         heroSliderImages: null,
-        categoryImages: null,
-        socialLinks: null
+        socialLinks: null,
       };
-      
+
       // Parse JSON fields if needed
-      if (settings.heroSliderImages) {
+      if (dbSettings.heroSliderImages) {
         try {
-          result.heroSliderImages = typeof settings.heroSliderImages === 'string' 
-            ? JSON.parse(settings.heroSliderImages) 
-            : settings.heroSliderImages;
+          result.heroSliderImages =
+            typeof dbSettings.heroSliderImages === 'string'
+              ? JSON.parse(dbSettings.heroSliderImages)
+              : dbSettings.heroSliderImages;
         } catch (e) {
           console.error('Error parsing heroSliderImages:', e);
           result.heroSliderImages = [];
         }
       }
-      
-      if (settings.categoryImages) {
+
+      if (dbSettings.socialLinks) {
         try {
-          result.categoryImages = typeof settings.categoryImages === 'string' 
-            ? JSON.parse(settings.categoryImages) 
-            : settings.categoryImages;
-        } catch (e) {
-          console.error('Error parsing categoryImages:', e);
-          result.categoryImages = {};
-        }
-      }
-      
-      if (settings.socialLinks) {
-        try {
-          result.socialLinks = typeof settings.socialLinks === 'string' 
-            ? JSON.parse(settings.socialLinks) 
-            : settings.socialLinks;
+          result.socialLinks =
+            typeof dbSettings.socialLinks === 'string'
+              ? JSON.parse(dbSettings.socialLinks)
+              : dbSettings.socialLinks;
         } catch (e) {
           console.error('Error parsing socialLinks:', e);
           result.socialLinks = {};
         }
       }
-      
+
       return result;
     }
-    
-    return null;
+
+    // If no settings found, create default settings
+    const defaultSettings = await prisma.websiteSettings.create({
+      data: {
+        id: 'settings',
+        siteName: 'Andaze Nu',
+        footerText: '© 2025 Andaze Nu. All rights reserved.',
+        contactEmail: 'contact@andazenu.com',
+        contactPhone: '+1234567890',
+      },
+    });
+
+    // Return the newly created settings
+    return {
+      id: defaultSettings.id,
+      siteName: defaultSettings.siteName,
+      logoUrl: defaultSettings.logoUrl,
+      faviconUrl: defaultSettings.faviconUrl,
+      footerText: defaultSettings.footerText,
+      contactEmail: defaultSettings.contactEmail,
+      contactPhone: defaultSettings.contactPhone,
+      updatedAt: defaultSettings.updatedAt.toISOString(),
+      heroSliderImages: [],
+      socialLinks: {},
+    };
   } catch (error) {
     console.error('Error retrieving website settings:', error);
     return null;
   }
-} 
+}

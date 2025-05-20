@@ -71,7 +71,6 @@ const ConfirmDialog = ({ isOpen, title, message, onConfirm, onCancel }: ConfirmD
   );
 };
 
-
 export default function AdminUsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -94,7 +93,7 @@ export default function AdminUsersPage() {
       setIsLoading(true);
       const response = await fetch('/api/admin/users');
       if (!response.ok) throw new Error('Failed to fetch users');
-      
+
       const data = await response.json();
       setUsers(data.users);
     } catch (error) {
@@ -108,7 +107,7 @@ export default function AdminUsersPage() {
   const handleRoleChangeClick = (userId: string, currentStatus: boolean) => {
     const action = currentStatus ? 'demote from admin' : 'promote to admin';
     const userEmail = users.find(u => u.id === userId)?.email || 'this user';
-    
+
     setConfirmDialog({
       isOpen: true,
       title: `Confirm Role Change`,
@@ -120,7 +119,7 @@ export default function AdminUsersPage() {
 
   const toggleAdminStatus = async () => {
     const { userId, currentStatus } = confirmDialog;
-    
+
     try {
       const response = await fetch(`/api/admin/users/${userId}`, {
         method: 'PATCH',
@@ -131,13 +130,11 @@ export default function AdminUsersPage() {
       });
 
       if (!response.ok) throw new Error('Failed to update user');
-      
-      setUsers(users.map(user => 
-        user.id === userId 
-          ? { ...user, isAdmin: !currentStatus } 
-          : user
-      ));
-      
+
+      setUsers(
+        users.map(user => (user.id === userId ? { ...user, isAdmin: !currentStatus } : user))
+      );
+
       toast.success(`User ${!currentStatus ? 'promoted to admin' : 'demoted from admin'}`);
     } catch (error) {
       console.error('Error updating user:', error);
@@ -148,9 +145,10 @@ export default function AdminUsersPage() {
   };
 
   // Filter users based on search term
-  const filteredUsers = users.filter(user => 
-    user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (user.name && user.name.toLowerCase().includes(searchTerm.toLowerCase()))
+  const filteredUsers = users.filter(
+    user =>
+      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (user.name && user.name.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   return (
@@ -170,7 +168,7 @@ export default function AdminUsersPage() {
                 placeholder="Search by name or email..."
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={e => setSearchTerm(e.target.value)}
               />
             </div>
             <button
@@ -192,12 +190,24 @@ export default function AdminUsersPage() {
             <table className="min-w-full bg-white border border-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Orders</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Name
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Email
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Created
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Orders
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
@@ -208,10 +218,12 @@ export default function AdminUsersPage() {
                     </td>
                   </tr>
                 ) : (
-                  filteredUsers.map((user) => (
+                  filteredUsers.map(user => (
                     <tr key={user.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">{user.name || 'Not set'}</div>
+                        <div className="text-sm font-medium text-gray-900">
+                          {user.name || 'Not set'}
+                        </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-500">{user.email}</div>
@@ -222,9 +234,7 @@ export default function AdminUsersPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-500">
-                          {user.orderCount || 0}
-                        </div>
+                        <div className="text-sm text-gray-500">{user.orderCount || 0}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
@@ -244,7 +254,7 @@ export default function AdminUsersPage() {
                         >
                           {user.isAdmin ? 'Remove Admin' : 'Make Admin'}
                         </button>
-                        
+
                         <button
                           onClick={() => router.push(`/admin/users/${user.id}`)}
                           className="text-indigo-600 hover:text-indigo-900"

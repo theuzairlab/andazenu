@@ -25,7 +25,7 @@ Create a `.env.local` file in the root of your project with the following variab
 ```
 # ImageKit Configuration
 NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY="your_public_key_here"
-IMAGEKIT_PRIVATE_KEY="your_private_key_here" 
+IMAGEKIT_PRIVATE_KEY="your_private_key_here"
 NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT="https://ik.imagekit.io/your_imagekit_id"
 ```
 
@@ -50,4 +50,4 @@ If you encounter issues:
 3. Check that you've prefixed client-side environment variables with `NEXT_PUBLIC_`
 4. Clear your browser cache and restart your development server
 
-For more information, refer to the [ImageKit documentation](https://docs.imagekit.io/). 
+For more information, refer to the [ImageKit documentation](https://docs.imagekit.io/).

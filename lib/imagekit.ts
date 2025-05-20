@@ -13,16 +13,18 @@ export const getImageKit = (): ImageKit => {
   if (!imageKitInstance) {
     const publicKey = process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY;
     const urlEndpoint = process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT;
-    
+
     // Check for required credentials
     if (!publicKey || !urlEndpoint) {
-      console.error('ImageKit credentials not properly configured. Please set the following environment variables:');
+      console.error(
+        'ImageKit credentials not properly configured. Please set the following environment variables:'
+      );
       console.error('- NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY');
       console.error('- NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT');
-      
+
       throw new Error('ImageKit is not properly configured. Check your environment variables.');
     }
-    
+
     // Create instance with only client-side keys
     imageKitInstance = new ImageKit({
       publicKey,
@@ -30,7 +32,7 @@ export const getImageKit = (): ImageKit => {
       privateKey: '', // Private key should only be used server-side
     });
   }
-  
+
   return imageKitInstance;
 };
 
@@ -45,7 +47,7 @@ export const uploadImage = async (file: File, fileName: string): Promise<string>
     if (!file) {
       throw new Error('No file provided');
     }
-    
+
     // Create a FormData object to send the file
     const formData = new FormData();
     formData.append('file', file);
@@ -65,7 +67,6 @@ export const uploadImage = async (file: File, fileName: string): Promise<string>
 
     const result = await response.json();
     return result.url;
-
   } catch (error) {
     console.error('Error in upload process:', error);
     // Return a placeholder image on failure
@@ -97,4 +98,4 @@ export const getFileIdFromUrl = (url: string): string => {
     console.error('Error extracting file ID from URL:', error);
     return '';
   }
-}; 
+};

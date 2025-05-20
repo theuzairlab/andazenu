@@ -2,6 +2,7 @@ import { Resend } from 'resend';
 import { randomUUID } from 'crypto';
 import prisma from './prisma';
 import { formatPrice } from './priceUtils';
+import { getColorName } from './colorUtils';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -9,19 +10,21 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function sendOrderConfirmation(email: string, order: any): Promise<void> {
   try {
     // Format order items for display in email
-    const orderItems = order.orderItems.map((item: any) => {
-      const itemPrice = item.price || 0;
-      return `
+    const orderItems = order.orderItems
+      .map((item: any) => {
+        const itemPrice = item.price || 0;
+        return `
         <tr>
           <td style="padding: 8px; border-bottom: 1px solid #eee;">${item.quantity} × ${item.size}</td>
-          <td style="padding: 8px; border-bottom: 1px solid #eee;">${item.color || 'N/A'}</td>
+          <td style="padding: 8px; border-bottom: 1px solid #eee;">${getColorName(item.color) || 'N/A'}</td>
           <td style="padding: 8px; border-bottom: 1px solid #eee;">${formatPrice(itemPrice)}</td>
         </tr>
       `;
-    }).join('');
+      })
+      .join('');
 
     const totalAmount = formatPrice(order.totalAmount || 0);
-    
+
     const { data, error } = await resend.emails.send({
       from: 'Andaze E Nu <onboarding@resend.dev>',
       to: email,
@@ -89,11 +92,11 @@ export async function sendOTP(email: string): Promise<{ token: string }> {
   try {
     // Generate a 6-digit OTP
     const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
-    
+
     // Set expiration to 10 minutes from now
     const expiresAt = new Date();
     expiresAt.setMinutes(expiresAt.getMinutes() + 10);
-    
+
     // Find if there's an existing OTP token for this email
     const existingToken = await prisma.oTPToken.findFirst({
       where: { email },
@@ -147,4 +150,4 @@ export async function sendOTP(email: string): Promise<{ token: string }> {
     console.error('Error in sendOTP:', error);
     throw new Error('Failed to generate and send OTP');
   }
-} 
+}

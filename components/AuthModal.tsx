@@ -31,7 +31,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
       setIsVisible(false);
       document.body.classList.remove('overflow-hidden');
     }
-    
+
     return () => {
       document.body.classList.remove('overflow-hidden');
     };
@@ -48,7 +48,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
-    
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
@@ -116,7 +116,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
       login(data.user);
       toast.success('Successfully logged in!');
       onClose();
-      
+
       // Redirect based on user role
       if (data.user.isAdmin) {
         router.push('/admin/dashboard');
@@ -134,18 +134,16 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   return (
     <>
       {/* Backdrop */}
-      <div 
+      <div
         className={`fixed inset-0 bg-black transition-opacity duration-300 ease-in-out ${
           isVisible ? 'opacity-60 z-50' : 'opacity-0 pointer-events-none'
         }`}
         onClick={onClose}
       />
-      
+
       {/* Modal */}
-      <div 
-        className={`fixed inset-0 z-50 flex items-center justify-center pointer-events-none`}
-      >
-        <div 
+      <div className={`fixed inset-0 z-50 flex items-center justify-center pointer-events-none`}>
+        <div
           ref={modalRef}
           className={`bg-white rounded-lg shadow-xl p-6 w-full max-w-md transform transition-all duration-300 pointer-events-auto ${
             isVisible ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
@@ -183,17 +181,14 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
               </p>
               <form onSubmit={handleSendOTP}>
                 <div className="mb-4">
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                     Email Address
                   </label>
                   <input
                     type="email"
                     id="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={e => setEmail(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-black"
                     placeholder="your@email.com"
                     required
@@ -215,17 +210,14 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
               </p>
               <form onSubmit={verifyOTP}>
                 <div className="mb-4">
-                  <label
-                    htmlFor="otp"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
+                  <label htmlFor="otp" className="block text-sm font-medium text-gray-700 mb-1">
                     One-Time Password
                   </label>
                   <input
                     type="text"
                     id="otp"
                     value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
+                    onChange={e => setOtp(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-black"
                     placeholder="6-digit code"
                     maxLength={6}
@@ -255,4 +247,4 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
       </div>
     </>
   );
-} 
+}

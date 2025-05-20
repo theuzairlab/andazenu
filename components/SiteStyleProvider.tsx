@@ -6,11 +6,7 @@ import useSiteSettings from '@/app/stores/useSiteSettings';
 /**
  * Component to inject dynamic CSS variables based on site settings
  */
-export default function SiteStyleProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function SiteStyleProvider({ children }: { children: React.ReactNode }) {
   const { settings } = useSiteSettings();
 
   // Apply CSS variables from settings
@@ -19,18 +15,12 @@ export default function SiteStyleProvider({
 
     // Apply primary color
     if (settings.primaryColor) {
-      document.documentElement.style.setProperty(
-        '--color-primary',
-        settings.primaryColor
-      );
+      document.documentElement.style.setProperty('--color-primary', settings.primaryColor);
     }
 
     // Apply secondary color
     if (settings.secondaryColor) {
-      document.documentElement.style.setProperty(
-        '--color-secondary',
-        settings.secondaryColor
-      );
+      document.documentElement.style.setProperty('--color-secondary', settings.secondaryColor);
     }
 
     // Set document title
@@ -53,4 +43,4 @@ export default function SiteStyleProvider({
   }, [settings]);
 
   return <>{children}</>;
-} 
+}

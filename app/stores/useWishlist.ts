@@ -14,26 +14,26 @@ const useWishlist = create<WishlistState>()(
   persist(
     (set, get) => ({
       items: [],
-      
-      addItem: (product) => {
+
+      addItem: product => {
         const { items } = get();
         const isItemExist = items.some(item => item.id === product.id);
-        
+
         if (!isItemExist) {
           set({ items: [...items, product] });
         }
       },
-      
-      removeItem: (productId) => {
+
+      removeItem: productId => {
         const { items } = get();
         set({ items: items.filter(item => item.id !== productId) });
       },
-      
-      isInWishlist: (productId) => {
+
+      isInWishlist: productId => {
         const { items } = get();
         return items.some(item => item.id === productId);
       },
-      
+
       clearWishlist: () => {
         set({ items: [] });
       },
@@ -44,4 +44,4 @@ const useWishlist = create<WishlistState>()(
   )
 );
 
-export default useWishlist; 
+export default useWishlist;

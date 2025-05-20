@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 
-const resend = new Resend('re_ZyL7tT9P_5w1fEMSnEQhN2VNyruZprXX3');
-const prisma = new PrismaClient();
+const resend = new Resend(process.env.RESEND_API_KEY || 're_ZyL7tT9P_5w1fEMSnEQhN2VNyruZprXX3');
 
 export async function POST(request: Request) {
   try {
@@ -53,7 +52,7 @@ export async function POST(request: Request) {
       subject: 'Your login OTP code',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h2 style="color: #333; text-align: center;">T-Shirt Store Login</h2>
+          <h2 style="color: #333; text-align: center;">Andaze E Nu Login</h2>
           <p style="font-size: 16px; line-height: 1.5; color: #555;">
             Here's your one-time password to login to your account. This code will expire in 5 minutes.
           </p>

@@ -16,21 +16,21 @@ interface AuthState {
   checkSession: () => Promise<void>;
 }
 
-const useAuth = create<AuthState>()((set) => ({
+const useAuth = create<AuthState>()(set => ({
   user: null,
   isAuthenticated: false,
   isLoading: true,
-  
-  login: (user) => {
+
+  login: user => {
     set({ user, isAuthenticated: true });
   },
-  
+
   logout: async () => {
     try {
       const response = await fetch('/api/logout', {
         method: 'POST',
       });
-      
+
       if (response.ok) {
         set({ user: null, isAuthenticated: false });
         // Redirect to home page after logout
@@ -42,43 +42,43 @@ const useAuth = create<AuthState>()((set) => ({
       console.error('Logout error:', error);
     }
   },
-  
+
   checkSession: async () => {
     try {
       set({ isLoading: true });
       const response = await fetch('/api/session');
-      
+
       if (response.ok) {
         const data = await response.json();
         if (data.isAuthenticated) {
-          set({ 
-            user: data.user, 
-            isAuthenticated: true, 
-            isLoading: false 
+          set({
+            user: data.user,
+            isAuthenticated: true,
+            isLoading: false,
           });
         } else {
-          set({ 
-            user: null, 
-            isAuthenticated: false, 
-            isLoading: false 
+          set({
+            user: null,
+            isAuthenticated: false,
+            isLoading: false,
           });
         }
       } else {
-        set({ 
-          user: null, 
-          isAuthenticated: false, 
-          isLoading: false 
+        set({
+          user: null,
+          isAuthenticated: false,
+          isLoading: false,
         });
       }
     } catch (error) {
       console.error('Session check error:', error);
-      set({ 
-        user: null, 
-        isAuthenticated: false, 
-        isLoading: false 
+      set({
+        user: null,
+        isAuthenticated: false,
+        isLoading: false,
       });
     }
-  }
+  },
 }));
 
-export default useAuth; 
+export default useAuth;

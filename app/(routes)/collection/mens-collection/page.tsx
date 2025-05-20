@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from "react";
-import ClientOnly from "@/components/ClientOnly";
-import ProductCollection, { Product } from "@/components/ProductCollection";
-import { createColorImageMap } from "@/lib/colorUtils";
+import { useState, useEffect } from 'react';
+import ClientOnly from '@/components/ClientOnly';
+import ProductCollection, { Product } from '@/components/ProductCollection';
+import { createColorImageMap } from '@/lib/colorUtils';
 
 export default function MensCollectionPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -15,24 +15,26 @@ export default function MensCollectionPage() {
       try {
         setIsLoading(true);
         const response = await fetch('/api/products?collection=MENS');
-        
+
         if (!response.ok) {
-          throw new Error('Failed to fetch men\'s products');
+          throw new Error("Failed to fetch men's products");
         }
-        
+
         const data = await response.json();
         setTotalResults(data.length);
-        
+
         // Transform the data to match the Product type
         const formattedProducts = data.map((product: any) => {
           // Calculate discount percentage
-          const discount = product.discount || Math.round(
-            ((product.regularPrice - product.sellingPrice) / product.regularPrice) * 100
-          );
-          
+          const discount =
+            product.discount ||
+            Math.round(
+              ((product.regularPrice - product.sellingPrice) / product.regularPrice) * 100
+            );
+
           // Use our utility function to create the color-to-image mapping
           const colorImageMap = createColorImageMap(product.productColors);
-          
+
           return {
             id: product.id,
             title: product.name,
@@ -44,10 +46,12 @@ export default function MensCollectionPage() {
             colors: product.productColors.map((colorObj: any) => colorObj.color),
             colorImages: colorImageMap,
             sizes: product.sizes || ['S', 'M', 'L', 'XL', 'XXL'],
-            description: product.description || 'Premium quality t-shirt with a stylish design. Made from soft, comfortable fabric perfect for everyday wear.'
+            description:
+              product.description ||
+              'Premium quality t-shirt with a stylish design. Made from soft, comfortable fabric perfect for everyday wear.',
           };
         });
-        
+
         setProducts(formattedProducts);
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -78,4 +82,4 @@ export default function MensCollectionPage() {
       </div>
     </ClientOnly>
   );
-} 
+}

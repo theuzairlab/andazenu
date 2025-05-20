@@ -5,11 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import useAuth from '@/app/stores/useAuth';
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const pathname = usePathname();
   const { user, logout, isLoading } = useAuth();
@@ -41,17 +37,14 @@ export default function AdminLayout({
                 </svg>
               </button>
               <Link href="/admin/dashboard" className="ml-4 font-semibold text-lg">
-                <img src="/images/logo1.png"   alt="logo" className="h-10" />
+                <img src="/images/logo1.png" alt="logo" className="h-10" />
               </Link>
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-600 hidden md:inline-block">
                 Welcome, {user?.name || user?.email || 'Admin'}
               </span>
-              <button
-                onClick={() => logout()}
-                className="text-sm text-red-600 hover:text-red-800"
-              >
+              <button onClick={() => logout()} className="text-sm text-red-600 hover:text-red-800">
                 Logout
               </button>
             </div>
@@ -80,7 +73,9 @@ export default function AdminLayout({
               >
                 <svg
                   className={`${
-                    pathname === '/admin/dashboard' ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500'
+                    pathname === '/admin/dashboard'
+                      ? 'text-gray-500'
+                      : 'text-gray-400 group-hover:text-gray-500'
                   } mr-3 h-6 w-6`}
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -97,6 +92,36 @@ export default function AdminLayout({
                 <span className={`${!isSidebarOpen && 'hidden md:hidden'}`}>Dashboard</span>
               </Link>
 
+              {/* Collections/Categories */}
+              <Link
+                href="/admin/categories"
+                className={`${
+                  pathname.startsWith('/admin/categories')
+                    ? 'bg-gray-100 text-gray-900'
+                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                } group flex items-center px-2 py-2 text-sm font-medium rounded-md`}
+              >
+                <svg
+                  className={`${
+                    pathname.startsWith('/admin/categories')
+                      ? 'text-gray-500'
+                      : 'text-gray-400 group-hover:text-gray-500'
+                  } mr-3 h-6 w-6`}
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                  />
+                </svg>
+                <span className={`${!isSidebarOpen && 'hidden md:hidden'}`}>Collections</span>
+              </Link>
+
               {/* Products */}
               <Link
                 href="/admin/products"
@@ -108,7 +133,9 @@ export default function AdminLayout({
               >
                 <svg
                   className={`${
-                    pathname.startsWith('/admin/products') ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500'
+                    pathname.startsWith('/admin/products')
+                      ? 'text-gray-500'
+                      : 'text-gray-400 group-hover:text-gray-500'
                   } mr-3 h-6 w-6`}
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -136,7 +163,9 @@ export default function AdminLayout({
               >
                 <svg
                   className={`${
-                    pathname.startsWith('/admin/orders') ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500'
+                    pathname.startsWith('/admin/orders')
+                      ? 'text-gray-500'
+                      : 'text-gray-400 group-hover:text-gray-500'
                   } mr-3 h-6 w-6`}
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -164,7 +193,9 @@ export default function AdminLayout({
               >
                 <svg
                   className={`${
-                    pathname.startsWith('/admin/users') ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500'
+                    pathname.startsWith('/admin/users')
+                      ? 'text-gray-500'
+                      : 'text-gray-400 group-hover:text-gray-500'
                   } mr-3 h-6 w-6`}
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -181,6 +212,36 @@ export default function AdminLayout({
                 <span className={`${!isSidebarOpen && 'hidden md:hidden'}`}>Users</span>
               </Link>
 
+              {/* Contact */}
+              <Link
+                href="/admin/contacts"
+                className={`${
+                  pathname.startsWith('/admin/contact')
+                    ? 'bg-gray-100 text-gray-900'
+                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                } group flex items-center px-2 py-2 text-sm font-medium rounded-md`}
+              >
+                <svg
+                  className={`${
+                    pathname.startsWith('/admin/contact')
+                      ? 'text-gray-500'
+                      : 'text-gray-400 group-hover:text-gray-500'
+                  } mr-3 h-6 w-6`}
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 10h.01M12 10h.01M16 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span className={`${!isSidebarOpen && 'hidden md:hidden'}`}>Contact</span>
+              </Link>
+
               {/* Settings */}
               <Link
                 href="/admin/settings"
@@ -192,7 +253,9 @@ export default function AdminLayout({
               >
                 <svg
                   className={`${
-                    pathname.startsWith('/admin/settings') ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500'
+                    pathname.startsWith('/admin/settings')
+                      ? 'text-gray-500'
+                      : 'text-gray-400 group-hover:text-gray-500'
                   } mr-3 h-6 w-6`}
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -219,7 +282,7 @@ export default function AdminLayout({
         </div>
 
         {/* Main content - with left margin to account for sidebar */}
-        <div 
+        <div
           className={`flex-1 overflow-auto p-6 transition-all duration-300 ease-in-out ${
             isSidebarOpen ? 'ml-64' : 'ml-0 md:ml-16'
           }`}
@@ -229,4 +292,4 @@ export default function AdminLayout({
       </div>
     </div>
   );
-} 
+}

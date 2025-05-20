@@ -8,29 +8,23 @@ export async function GET() {
     // Check authentication from cookie
     const cookieStore = await cookies();
     const authCookie = cookieStore.get('auth-server-cookie');
-    
+
     if (!authCookie?.value) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    
+
     const authData = JSON.parse(authCookie.value);
     if (!authData.isAuthenticated || !authData.user?.id) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
-    
+
     // Get user orders
     const orders = await prisma.order.findMany({
       where: {
-        userId: authData.user.id
+        userId: authData.user.id,
       },
       orderBy: {
-        createdAt: 'desc'
+        createdAt: 'desc',
       },
       include: {
         orderItems: {
@@ -38,12 +32,12 @@ export async function GET() {
             product: {
               select: {
                 name: true,
-                imageUrl: true
-              }
-            }
-          }
-        }
-      }
+                imageUrl: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     // Format the order data to ensure consistent price display
@@ -52,16 +46,13 @@ export async function GET() {
       totalAmount: parseFloat(order.totalAmount.toString()),
       orderItems: order.orderItems.map(item => ({
         ...item,
-        price: parseFloat(item.price.toString())
-      }))
+        price: parseFloat(item.price.toString()),
+      })),
     }));
-    
+
     return NextResponse.json({ orders: formattedOrders });
   } catch (error) {
     console.error('Error fetching user orders:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch orders' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to fetch orders' }, { status: 500 });
   }
-} 
+}

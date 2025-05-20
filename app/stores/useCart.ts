@@ -14,7 +14,12 @@ interface CartState {
   items: CartItem[];
   addItem: (item: CartItem) => void;
   removeItem: (productId: string | number, color: string, size: string) => void;
-  updateQuantity: (productId: string | number, color: string, size: string, quantity: number) => void;
+  updateQuantity: (
+    productId: string | number,
+    color: string,
+    size: string,
+    quantity: number
+  ) => void;
   clearCart: () => void;
   isOpen: boolean;
   toggleCart: () => void;
@@ -31,20 +36,23 @@ const useCart = create<CartState>()(
       items: [],
       isOpen: false,
 
-      addItem: (item) => {
+      addItem: item => {
         const { items } = get();
-        
+
         // Ensure product has valid sellingPrice before adding to cart
         const validItem = {
           ...item,
-          product: ensureProductPrice(item.product)
+          product: ensureProductPrice(item.product),
         };
-        
+
         // Check if the item already exists with the same color and size
         const existingItemIndex = items.findIndex(
-          i => i.product.id === validItem.product.id && i.color === validItem.color && i.size === validItem.size
+          i =>
+            i.product.id === validItem.product.id &&
+            i.color === validItem.color &&
+            i.size === validItem.size
         );
-        
+
         if (existingItemIndex !== -1) {
           // If item exists, update quantity
           const updatedItems = [...items];
@@ -55,7 +63,7 @@ const useCart = create<CartState>()(
           set({ items: [...items, validItem] });
         }
       },
-      
+
       removeItem: (productId, color, size) => {
         const { items } = get();
         const filteredItems = items.filter(
@@ -63,7 +71,7 @@ const useCart = create<CartState>()(
         );
         set({ items: filteredItems });
       },
-      
+
       updateQuantity: (productId, color, size, quantity) => {
         const { items } = get();
         const updatedItems = items.map(item => {
@@ -74,51 +82,51 @@ const useCart = create<CartState>()(
         });
         set({ items: updatedItems });
       },
-      
+
       clearCart: () => {
         set({ items: [] });
       },
-      
+
       toggleCart: () => {
         const { isOpen } = get();
         set({ isOpen: !isOpen });
       },
-      
+
       closeCart: () => {
         set({ isOpen: false });
       },
-      
+
       openCart: () => {
         set({ isOpen: true });
       },
-      
+
       getTotalItems: () => {
         const { items } = get();
         return items.reduce((total, item) => total + item.quantity, 0);
       },
 
       // Get numeric price from a cart item (product)
-      getItemPrice: (item) => {
+      getItemPrice: item => {
         // Ensure the product has a valid sellingPrice
         const product = ensureProductPrice(item.product);
         return product.sellingPrice;
       },
-      
+
       getTotalPrice: () => {
         const { items, getItemPrice } = get();
         try {
           // Calculate total price by summing all items
           const total = items.reduce((total, item) => {
             const price = getItemPrice(item);
-            return total + (price * item.quantity);
+            return total + price * item.quantity;
           }, 0);
-          
+
           return total;
         } catch (error) {
           console.error('Error calculating total price:', error);
           return 0;
         }
-      }
+      },
     }),
     {
       name: 'cart-storage', // unique name for localStorage
@@ -126,4 +134,4 @@ const useCart = create<CartState>()(
   )
 );
 
-export default useCart; 
+export default useCart;

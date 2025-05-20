@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "./generated/client"
 }
 
 datasource db {
@@ -34,13 +35,25 @@ model Product {
   stock         Int
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
-  collection    Collection     @default(MENS)
+  categoryId    String
   discount      Int?
   regularPrice  Int
   sellingPrice  Int
   orderItems    OrderItem[]
   productColors ProductColor[]
   productSizes  ProductSize[]
+  category      Category       @relation(fields: [categoryId], references: [id])
+}
+
+model Category {
+  id          String    @id @default(uuid())
+  name        String
+  slug        String    @unique
+  description String?
+  imageUrl    String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  products    Product[]
 }
 
 model ProductColor {
@@ -91,24 +104,16 @@ model OrderItem {
 
 // Website settings model to store configurable site elements
 model WebsiteSettings {
-  id                String   @id @default("settings") // Only one record will exist
-  siteName          String   @default("T-Shirt Store")
-  logoUrl           String?
-  faviconUrl        String?
-  primaryColor      String   @default("#000000")
-  secondaryColor    String   @default("#ffffff")
-  heroSliderImages  Json?    // Array of image URLs for the main slider
-  categoryImages    Json?    // Images for category sections
-  footerText        String   @default("© 2023 T-Shirt Store. All rights reserved.")
-  contactEmail      String   @default("contact@example.com")
-  contactPhone      String   @default("+1234567890")
-  socialLinks       Json?    // JSON object with social media links
-  updatedAt         DateTime @updatedAt
-}
-
-enum Collection {
-  MENS
-  KIDS
+  id               String   @id @default("settings") // Only one record will exist
+  siteName         String   @default("Andaze Nu")
+  logoUrl          String?
+  faviconUrl       String?
+  heroSliderImages Json?    // Array of image URLs for the main slider
+  footerText       String   @default("© 2023 Andaze Nu. All rights reserved.")
+  contactEmail     String   @default("contact@andazenu.com")
+  contactPhone     String   @default("+1234567890")
+  socialLinks      Json?    // JSON object with social media links
+  updatedAt        DateTime @updatedAt
 }
 
 enum OrderStatus {
@@ -117,4 +122,22 @@ enum OrderStatus {
   SHIPPED
   DELIVERED
   CANCELLED
+}
+
+model Contact {
+  id        String         @id @default(cuid())
+  name      String         @db.VarChar(255)
+  email     String         @db.VarChar(255)
+  phone     String         @db.VarChar(20)
+  message   String         @db.Text
+  status    ContactStatus  @default(NEW)
+  reply     String?        @db.Text
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
+
+enum ContactStatus {
+  NEW
+  REPLIED
+  ARCHIVED
 }

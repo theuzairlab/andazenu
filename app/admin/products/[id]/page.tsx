@@ -10,17 +10,17 @@ export default function EditProductPage() {
   const router = useRouter();
   const [product, setProduct] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   useEffect(() => {
     async function loadProduct() {
       try {
         setIsLoading(true);
         const response = await fetch(`/api/products/${params.id}`);
-        
+
         if (!response.ok) {
           throw new Error('Failed to load product');
         }
-        
+
         const data = await response.json();
         setProduct(data);
       } catch (error) {
@@ -31,10 +31,10 @@ export default function EditProductPage() {
         setIsLoading(false);
       }
     }
-    
+
     loadProduct();
   }, [params.id, router]);
-  
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -42,14 +42,14 @@ export default function EditProductPage() {
       </div>
     );
   }
-  
+
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-2xl font-bold">Edit Product</h1>
       </div>
-      
+
       {product && <ProductForm initialData={product} isEditing={true} />}
     </div>
   );
-} 
+}

@@ -18,4 +18,4 @@ export default function ClientOnly({ children }: ClientOnlyProps) {
   }
 
   return <>{children}</>;
-} 
+}

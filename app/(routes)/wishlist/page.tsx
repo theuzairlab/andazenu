@@ -9,7 +9,6 @@ import QuickViewModal from '@/components/QuickViewModal';
 import { getColorClass, getImageForColor } from '@/lib/colorUtils';
 import { ensureProductPrice } from '@/lib/priceUtils';
 
-
 export type products = {
   id: number | string;
   title: string;
@@ -21,7 +20,7 @@ export type products = {
   colorImages?: Record<string, string>;
   sizes?: string[];
   description?: string;
-}
+};
 
 export default function WishlistPage() {
   const { items, removeItem } = useWishlist();
@@ -67,22 +66,18 @@ export default function WishlistPage() {
   const handleColorSelect = (productId: string | number, color: string) => {
     setSelectedColors({
       ...selectedColors,
-      [productId]: color
+      [productId]: color,
     });
 
     // Update product image based on selected color
     const product = wishlistItems.find(item => item.id === productId);
     if (product) {
       // Use our utility function to get the image
-      const imageUrl = getImageForColor(
-        color,
-        product.colorImages || {},
-        product.image
-      );
-      
+      const imageUrl = getImageForColor(color, product.colorImages || {}, product.image);
+
       setProductImages({
         ...productImages,
-        [productId]: imageUrl
+        [productId]: imageUrl,
       });
     }
   };
@@ -104,7 +99,9 @@ export default function WishlistPage() {
       {wishlistItems.length === 0 ? (
         <div className="text-center py-16">
           <h2 className="text-2xl font-medium mb-4">Your wishlist is empty</h2>
-          <p className="text-gray-500 mb-8">Add items to your wishlist by clicking the heart icon on products.</p>
+          <p className="text-gray-500 mb-8">
+            Add items to your wishlist by clicking the heart icon on products.
+          </p>
           <Link
             href="/"
             className="inline-block px-8 py-3 bg-black text-white rounded-4xl hover:bg-gray-800 transition-colors"
@@ -127,7 +124,18 @@ export default function WishlistPage() {
                   onClick={() => removeItem(product.id)}
                   className="absolute top-3 right-3 z-10 w-8 h-8 cursor-pointer bg-white rounded-full flex items-center justify-center shadow-sm"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-700">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="text-gray-700"
+                  >
                     <line x1="18" y1="6" x2="6" y2="18"></line>
                     <line x1="6" y1="6" x2="18" y2="18"></line>
                   </svg>
@@ -158,15 +166,15 @@ export default function WishlistPage() {
                     >
                       Select Options
                     </button>
-
-
                   </div>
                 </div>
               </div>
 
               <div className="mt-4 flex flex-col items-center">
                 <Link href={`/products/${product.id}`}>
-                  <h3 className="font-bold text-md mb-1 text-center hover:text-gray-600">{product.title}</h3>
+                  <h3 className="font-bold text-md mb-1 text-center hover:text-gray-600">
+                    {product.title}
+                  </h3>
                 </Link>
                 <div className="flex items-start gap-2 mb-2">
                   <span className="font-semibold text-red-500">{product.salePrice}</span>
@@ -201,11 +209,7 @@ export default function WishlistPage() {
       )}
 
       {/* Quick View Modal */}
-      <QuickViewModal
-        product={selectedProduct}
-        isOpen={isModalOpen}
-        onClose={closeQuickView}
-      />
+      <QuickViewModal product={selectedProduct} isOpen={isModalOpen} onClose={closeQuickView} />
     </div>
   );
-} 
+}

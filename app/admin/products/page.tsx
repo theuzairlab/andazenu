@@ -46,11 +46,11 @@ export default function ProductsPage() {
       try {
         setIsLoading(true);
         const response = await fetch('/api/products');
-        
+
         if (!response.ok) {
           throw new Error('Failed to fetch products');
         }
-        
+
         const data = await response.json();
         setProducts(data);
       } catch (error) {
@@ -60,7 +60,7 @@ export default function ProductsPage() {
         setIsLoading(false);
       }
     }
-    
+
     fetchProducts();
   }, []);
 
@@ -69,16 +69,16 @@ export default function ProductsPage() {
     if (!confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
       return;
     }
-    
+
     try {
       const response = await fetch(`/api/products/${id}`, {
         method: 'DELETE',
       });
-      
+
       if (!response.ok) {
         throw new Error('Failed to delete product');
       }
-      
+
       // Remove product from state
       setProducts(products.filter(product => product.id !== id));
       toast.success('Product deleted successfully');
@@ -89,9 +89,10 @@ export default function ProductsPage() {
   };
 
   // Filter products based on search term and collection
-  const filteredProducts = products.filter((product) => {
+  const filteredProducts = products.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCollection = selectedCollection === 'All' || product.collection === selectedCollection;
+    const matchesCollection =
+      selectedCollection === 'All' || product.collection === selectedCollection;
     return matchesSearch && matchesCollection;
   });
 
@@ -130,7 +131,7 @@ export default function ProductsPage() {
               placeholder="Search products..."
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={e => setSearchTerm(e.target.value)}
             />
             <svg
               className="absolute right-3 top-2.5 h-5 w-5 text-gray-400"
@@ -151,7 +152,7 @@ export default function ProductsPage() {
             <select
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
               value={selectedCollection}
-              onChange={(e) => setSelectedCollection(e.target.value)}
+              onChange={e => setSelectedCollection(e.target.value)}
             >
               <option value="All">All Collections</option>
               <option value="MENS">Men's</option>
@@ -176,32 +177,47 @@ export default function ProductsPage() {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
                     Product
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
                     Collection
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
                     Price
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
                     Stock
                   </th>
-                  <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {filteredProducts.map((product) => (
+                {filteredProducts.map(product => (
                   <tr key={product.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="h-10 w-10 flex-shrink-0 rounded-md overflow-hidden">
                           {product.productColors && product.productColors.length > 0 ? (
-                            <img 
-                              src={product.productColors[0].imageUrl} 
+                            <img
+                              src={product.productColors[0].imageUrl}
                               alt={product.name}
                               className="h-full w-full object-cover"
                             />
@@ -213,11 +229,11 @@ export default function ProductsPage() {
                         </div>
                         <div className="ml-4">
                           <div className="text-sm font-medium text-gray-900">{product.name}</div>
-                          <div className="text-sm text-gray-500">{
-                            product.description.length > 50 
-                              ? `${product.description.substring(0, 50)}...` 
-                              : product.description
-                          }</div>
+                          <div className="text-sm text-gray-500">
+                            {product.description.length > 50
+                              ? `${product.description.substring(0, 50)}...`
+                              : product.description}
+                          </div>
                         </div>
                       </div>
                     </td>
@@ -242,8 +258,8 @@ export default function ProductsPage() {
                           product.stock > 20
                             ? 'bg-green-100 text-green-800'
                             : product.stock > 10
-                            ? 'bg-yellow-100 text-yellow-800'
-                            : 'bg-red-100 text-red-800'
+                              ? 'bg-yellow-100 text-yellow-800'
+                              : 'bg-red-100 text-red-800'
                         }`}
                       >
                         {product.stock} in stock
@@ -263,7 +279,7 @@ export default function ProductsPage() {
                         >
                           View
                         </Link>
-                        <button 
+                        <button
                           onClick={() => handleDeleteProduct(product.id)}
                           className="text-red-600 hover:text-red-900"
                         >
@@ -276,7 +292,7 @@ export default function ProductsPage() {
               </tbody>
             </table>
           </div>
-          
+
           {filteredProducts.length === 0 && !isLoading && (
             <div className="text-center py-12">
               <svg
@@ -325,4 +341,4 @@ export default function ProductsPage() {
       )}
     </div>
   );
-} 
+}

@@ -43,11 +43,11 @@ export default function AdminOrdersPage() {
     try {
       const response = await fetch('/api/admin/orders');
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.error || 'Failed to fetch orders');
       }
-      
+
       setOrders(data.orders);
     } catch (error) {
       console.error('Error fetching orders:', error);
@@ -67,18 +67,20 @@ export default function AdminOrdersPage() {
         },
         body: JSON.stringify({ status: newStatus }),
       });
-      
+
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.error || 'Failed to update order status');
       }
-      
+
       // Update local state to reflect changes
-      setOrders(orders.map(order => 
-        order.id === orderId ? { ...order, status: newStatus as Order['status'] } : order
-      ));
-      
+      setOrders(
+        orders.map(order =>
+          order.id === orderId ? { ...order, status: newStatus as Order['status'] } : order
+        )
+      );
+
       toast.success('Order status updated successfully');
     } catch (error) {
       console.error('Error updating order status:', error);
@@ -87,9 +89,8 @@ export default function AdminOrdersPage() {
   };
 
   // Filter orders based on status
-  const filteredOrders = statusFilter === 'ALL' 
-    ? orders 
-    : orders.filter(order => order.status === statusFilter);
+  const filteredOrders =
+    statusFilter === 'ALL' ? orders : orders.filter(order => order.status === statusFilter);
 
   // Get status badge color
   const getStatusBadgeColor = (status: string) => {
@@ -184,28 +185,46 @@ export default function AdminOrdersPage() {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
                     Order ID
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
                     Customer
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
                     Date
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
                     Total
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
                     Status
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {filteredOrders.map((order) => (
+                {filteredOrders.map(order => (
                   <tr key={order.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
                       {order.id.slice(0, 8).toUpperCase()}
@@ -221,14 +240,16 @@ export default function AdminOrdersPage() {
                       Rs {order.totalAmount.toLocaleString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadgeColor(order.status)}`}>
+                      <span
+                        className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadgeColor(order.status)}`}
+                      >
                         {order.status}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <select
                         value={order.status}
-                        onChange={(e) => updateOrderStatus(order.id, e.target.value)}
+                        onChange={e => updateOrderStatus(order.id, e.target.value)}
                         className="rounded border border-gray-300 py-1 px-2 text-sm"
                       >
                         <option value="PENDING">Pending</option>
@@ -253,4 +274,4 @@ export default function AdminOrdersPage() {
       </div>
     </div>
   );
-} 
+}
