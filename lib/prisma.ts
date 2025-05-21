@@ -1,35 +1,42 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../prisma/generated/client';
 
-// Explicitly type the PrismaClient to ensure all models are available
-const prismaClientSingleton = () => {
-  try {
-    const client = new PrismaClient();
-    console.log('Prisma Client initialized successfully');
-    return client;
-  } catch (error) {
-    console.error('Failed to initialize Prisma Client:', error);
-    // During build time, return a mock client if needed
-    if (process.env.NODE_ENV === 'production' && process.env.NEXT_PHASE === 'phase-production-build') {
-      console.log('Using mock client during build');
-      return {} as PrismaClient;
-    }
-    throw error;
-  }
-};
-
+// Define global type for Prisma
 declare global {
   var prisma: PrismaClient | undefined;
 }
 
-// PrismaClient is attached to the `global` object in development to prevent
-// exhausting your database connection limit.
-const prisma = global.prisma || prismaClientSingleton();
+// Create a singleton Prisma client that works in all environments
+function getPrismaClient() {
+  // In development, use the global variable to prevent multiple instances
+  if (process.env.NODE_ENV === 'development') {
+    if (!global.prisma) {
+      console.log('Creating new PrismaClient in development mode');
+      global.prisma = new PrismaClient({
+        log: ['query', 'error', 'warn'],
+      });
+    }
+    return global.prisma;
+  }
 
-export default prisma;
-
-if (process.env.NODE_ENV !== 'production') {
-  global.prisma = prisma;
-
-  // Additional logging for development
-  console.log('Prisma Client methods:', Object.keys(prisma));
+  // In production, create a new client (won't be called multiple times as Next.js caches imports)
+  try {
+    console.log('Creating PrismaClient in production mode');
+    // Pass connection parameters to help with connection pooling
+    return new PrismaClient({
+      log: ['error'],
+      // Adding these options can help with Supabase connections
+      datasources: {
+        db: {
+          url: process.env.DATABASE_URL,
+        },
+      },
+    });
+  } catch (error) {
+    console.error('Failed to initialize Prisma Client:', error);
+    throw error;
+  }
 }
+
+// Export the client as a default export
+const prisma = getPrismaClient();
+export default prisma;
