@@ -13,15 +13,6 @@ export default function SiteStyleProvider({ children }: { children: React.ReactN
   useEffect(() => {
     if (!settings) return;
 
-    // Apply primary color
-    if (settings.primaryColor) {
-      document.documentElement.style.setProperty('--color-primary', settings.primaryColor);
-    }
-
-    // Apply secondary color
-    if (settings.secondaryColor) {
-      document.documentElement.style.setProperty('--color-secondary', settings.secondaryColor);
-    }
 
     // Set document title
     if (settings.siteName) {

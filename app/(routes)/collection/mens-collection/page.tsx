@@ -14,7 +14,19 @@ export default function MensCollectionPage() {
     const fetchProducts = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('/api/products?collection=MENS');
+        
+        // First get the category ID for men's collection
+        const categoryResponse = await fetch('/api/categories?slug=mens-collection');
+        const categories = await categoryResponse.json();
+        
+        if (!categories || categories.length === 0) {
+          throw new Error("Men's category not found");
+        }
+        
+        const categoryId = categories[0].id;
+        
+        // Then fetch products with that category ID
+        const response = await fetch(`/api/products?category=${categoryId}`);
 
         if (!response.ok) {
           throw new Error("Failed to fetch men's products");

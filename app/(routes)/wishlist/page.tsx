@@ -9,18 +9,18 @@ import QuickViewModal from '@/components/QuickViewModal';
 import { getColorClass, getImageForColor } from '@/lib/colorUtils';
 import { ensureProductPrice } from '@/lib/priceUtils';
 
-export type products = {
-  id: number | string;
-  title: string;
-  image: string;
-  salePrice: string;
-  regularPrice: string;
-  discount: string;
-  colors: string[];
-  colorImages?: Record<string, string>;
-  sizes?: string[];
-  description?: string;
-};
+// export type products = {
+//   id: number | string;
+//   title: string;
+//   image: string;
+//   salePrice: string;
+//   regularPrice: string;
+//   discount: string;
+//   colors: string[];
+//   colorImages?: Record<string, string>;
+//   sizes?: string[];
+//   description?: string;
+// };
 
 export default function WishlistPage() {
   const { items, removeItem } = useWishlist();

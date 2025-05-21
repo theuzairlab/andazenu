@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import { useParams } from 'next/navigation';
 import { formatPrice } from '@/lib/utils';
+import { getColorName } from '@/lib/colorUtils';
+import Image from 'next/image';
 
 // Types
 type Order = {
@@ -258,6 +260,12 @@ export default function OrderDetailPage() {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
+                  Image
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Details
                 </th>
                 <th
@@ -289,8 +297,13 @@ export default function OrderDetailPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">
+                      <Image src={`${item.product?.imageUrl}`} alt={`${item.product?.name}`} width={80} height={80} />
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-500">Size: {item.size}</div>
-                    {item.color && <div className="text-sm text-gray-500">Color: {item.color}</div>}
+                    {item.color && <div className="text-sm text-gray-500">Color: {getColorName(item.color)}</div>}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {formatPrice(item.price || 0)}

@@ -8,12 +8,41 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const categoryId = searchParams.get('category');
+    const collectionSlug = searchParams.get('collection');
 
-    let whereClause = {};
+    let whereClause: any = {};
+    
+    // If categoryId is provided, use it directly
     if (categoryId) {
-      whereClause = {
-        categoryId: categoryId,
-      };
+      whereClause.categoryId = categoryId;
+    }
+    
+    // If collectionSlug is provided, find the categoryId first
+    if (collectionSlug) {
+      let slug = collectionSlug.toLowerCase();
+      
+      // Convert MENS to mens-collection, KIDS to kids-collection if needed
+      if (slug === 'mens') slug = 'mens-collection';
+      if (slug === 'kids') slug = 'kids-collection';
+      
+      try {
+        const category = await prisma.category.findFirst({
+          where: {
+            slug: {
+              contains: slug,
+              mode: 'insensitive',
+            },
+          },
+        });
+        
+        if (category) {
+          whereClause.categoryId = category.id;
+        } else {
+          console.log(`No category found with slug containing: ${collectionSlug}`);
+        }
+      } catch (error) {
+        console.error('Error finding category by slug:', error);
+      }
     }
 
     const products = await prisma.product.findMany({

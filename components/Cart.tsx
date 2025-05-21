@@ -126,7 +126,7 @@ const Cart = () => {
               </p>
               <button
                 onClick={closeCart}
-                className="mt-4 bg-black text-white py-3 px-6 rounded-4xl font-medium hover:bg-gray-800 transition-colors"
+                className="mt-4 bg-black text-white py-3 px-6 rounded-3xl font-medium hover:bg-gray-800 transition-colors"
               >
                 Continue Shopping
               </button>
@@ -175,7 +175,7 @@ const Cart = () => {
 
                     <div className="flex justify-between items-center mt-2">
                       {/* Quantity selector */}
-                      <div className="flex items-center border rounded-4xl">
+                      <div className="flex items-center border rounded-3xl">
                         <button
                           onClick={() =>
                             handleQuantityChange(
@@ -307,7 +307,7 @@ const Cart = () => {
             {/* Checkout button */}
             <Link
               href="/checkout"
-              className="w-full bg-black text-white py-3 px-4 rounded-4xl font-medium hover:bg-gray-800 transition-colors flex items-center justify-center"
+              className="w-full bg-black text-white py-3 px-4 rounded-3xl font-medium hover:bg-gray-800 transition-colors flex items-center justify-center"
               onClick={closeCart}
             >
               Proceed to Checkout
@@ -316,7 +316,7 @@ const Cart = () => {
             {/* Continue shopping */}
             <button
               onClick={closeCart}
-              className="w-full text-black py-3 px-4 border border-black rounded-4xl font-medium hover:bg-gray-100 transition-colors"
+              className="w-full text-black py-3 px-4 border border-black rounded-3xl font-medium hover:bg-gray-100 transition-colors"
             >
               Continue Shopping
             </button>

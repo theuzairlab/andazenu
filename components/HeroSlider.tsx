@@ -55,14 +55,14 @@ export default function HeroSlider() {
         </div>
       ))}
 
-      <div className="absolute bottom-15 left-1/2 transform -translate-x-1/2 flex space-x-2">
+      <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 flex space-x-2">
         {slides.map((_, index) => (
           <button
             key={index}
             className={`w-2 h-2 rounded-full transition-colors duration-300 ${
               index === currentSlide
                 ? 'bg-gray-700 ring-1 ring-offset-4 ring-black scale-90'
-                : 'bg-gray-700 bg-opacity-50'
+                : 'bg-gray-700 bg-opacity-90'
             }`}
             onClick={() => setCurrentSlide(index)}
             aria-label={`Go to slide ${index + 1}`}

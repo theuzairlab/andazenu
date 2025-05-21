@@ -3,6 +3,9 @@ import { cookies } from 'next/headers';
 import prisma from '@/lib/prisma';
 import { formatPrice } from '@/lib/utils';
 
+// Add this at the top of each affected API route file
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
     // Check authentication from cookie

@@ -156,7 +156,7 @@ export default function ProductsSlider({
           onMouseLeave={() => setIsHovered(false)}
         >
           <button
-            className="absolute -left-5 top-2/5 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-100 transition-colors"
+            className="absolute -left-5 top-1/3 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-100 transition-colors"
             onClick={prevSlide}
             aria-label="Previous product"
           >
@@ -258,7 +258,7 @@ export default function ProductsSlider({
           </div>
 
           <button
-            className="absolute -right-5 top-2/5 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-100 transition-colors"
+            className="absolute -right-5 top-1/3 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-100 transition-colors"
             onClick={nextSlide}
             aria-label="Next product"
           >

@@ -2,7 +2,11 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import prisma from '@/lib/prisma';
 import { formatPrice } from '@/lib/utils';
-import { OrderStatus } from '@prisma/client';
+import { OrderStatus } from '@/prisma/generated/client';
+// import { OrderStatus } from '@prisma/client';
+
+// Add this at the top of each affected API route file
+export const dynamic = "force-dynamic";
 
 // GET handler to fetch all orders
 export async function GET(request: Request) {

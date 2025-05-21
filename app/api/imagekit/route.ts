@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticationParameters } from '@/lib/imagekit';
 
+// Add this at the top of each affected API route file
+export const dynamic = "force-dynamic";
+
 // API route to get authentication parameters for client-side uploads
 export async function GET() {
   try {

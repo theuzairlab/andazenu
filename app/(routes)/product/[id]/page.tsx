@@ -363,7 +363,7 @@ export default function ProductDetailPage() {
               <div className="grid grid-cols-12 gap-4 mb-4">
                 <div className="col-span-3 flex items-center border border-gray-300 rounded-4xl">
                   <button
-                    className="w-30 h-12 flex items-center justify-center"
+                    className="w-28 h-12 flex items-center justify-center"
                     onClick={decreaseQuantity}
                   >
                     <svg
@@ -387,7 +387,7 @@ export default function ProductDetailPage() {
                     className="w-full h-12 text-center border-none focus:outline-none"
                   />
                   <button
-                    className="w-30 h-12 flex items-center justify-center"
+                    className="w-28 h-12 flex items-center justify-center"
                     onClick={increaseQuantity}
                   >
                     <svg

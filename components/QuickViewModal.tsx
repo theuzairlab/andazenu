@@ -197,7 +197,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                 {sizes.map(size => (
                   <button
                     key={size}
-                    className={`px-4 py-2 border rounded-4xl ${
+                    className={`px-4 py-2 border rounded-3xl ${
                       selectedSize === size
                         ? 'border-black bg-black text-white'
                         : 'border-gray-300 hover:border-gray-500 bg-white'
@@ -227,9 +227,9 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
             </div>
 
             <div className="mb-6 flex items-center gap-2">
-              <div className="w-30 flex items-center border border-gray-300 rounded-4xl">
+              <div className="w-28 flex items-center border border-gray-300 rounded-4xl">
                 <button
-                  className="w-30 h-12 flex items-center justify-center"
+                  className="w-28 h-12 flex items-center justify-center"
                   onClick={decreaseQuantity}
                 >
                   <svg
@@ -253,7 +253,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                   className="w-full h-12 text-center border-none focus:outline-none"
                 />
                 <button
-                  className="w-30 h-12 flex items-center justify-center"
+                  className="w-28 h-12 flex items-center justify-center"
                   onClick={increaseQuantity}
                 >
                   <svg

@@ -14,7 +14,19 @@ export default function KidsCollectionPage() {
     const fetchProducts = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('/api/products?collection=KIDS');
+        
+        // First get the category ID for kids collection
+        const categoryResponse = await fetch('/api/categories?slug=kids-collection');
+        const categories = await categoryResponse.json();
+        
+        if (!categories || categories.length === 0) {
+          throw new Error("Kids category not found");
+        }
+        
+        const categoryId = categories[0].id;
+        
+        // Then fetch products with that category ID
+        const response = await fetch(`/api/products?category=${categoryId}`);
 
         if (!response.ok) {
           throw new Error("Failed to fetch kids' products");

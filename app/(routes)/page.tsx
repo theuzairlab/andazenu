@@ -89,7 +89,9 @@ export default function Home() {
         // Get kids products
         const kidsCollection = formattedProducts.filter((product: any) => {
           const productFromData = data.find((p: any) => p.id === product.id);
-          return productFromData.collection === 'KIDS';
+          return productFromData.category && 
+                 productFromData.category.name && 
+                 productFromData.category.name.toLowerCase().includes('kid');
         });
         setKidsProducts(kidsCollection);
 
