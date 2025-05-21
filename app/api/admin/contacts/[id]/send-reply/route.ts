@@ -1,10 +1,10 @@
+export const dynamic = "force-dynamic";
+
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import prisma from '@/lib/prisma';
 import { Resend } from 'resend';
 
-// Add this at the top of each affected API route file
-export const dynamic = "force-dynamic";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 

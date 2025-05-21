@@ -1,3 +1,6 @@
+// Add this at the top of each affected API route file
+export const dynamic = "force-dynamic";
+
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { Resend } from 'resend';
