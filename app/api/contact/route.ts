@@ -1,8 +1,9 @@
-export const dynamic = "force-dynamic";
-export const runtime = "nodejs";
-
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+
+// Add force-dynamic to prevent caching issues with API routes
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 export async function POST(request: NextRequest) {
   try {

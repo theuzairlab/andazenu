@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { cookies } from 'next/headers';
 
+// Add force-dynamic to prevent caching issues with API routes
+export const dynamic = "force-dynamic";
+
 // Helper function to check if the user is an admin
 async function isAdmin(request: NextRequest): Promise<boolean> {
   try {

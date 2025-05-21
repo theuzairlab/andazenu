@@ -3,6 +3,9 @@ import prisma from '@/lib/prisma';
 import { getFileIdFromUrl } from '@/lib/imagekit';
 import { parsePrice } from '@/lib/priceUtils';
 
+// Add force-dynamic to prevent caching issues with API routes
+export const dynamic = "force-dynamic";
+
 // GET all products
 export async function GET(req: NextRequest) {
   try {
