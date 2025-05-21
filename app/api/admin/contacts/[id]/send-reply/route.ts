@@ -7,7 +7,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
     // Check authentication from cookie
@@ -30,7 +30,7 @@ export async function POST(
     }
 
     // Ensure params.id is properly accessed
-    const contactId = params.id;
+    const contactId = context.params.id;
     if (!contactId) {
       return NextResponse.json(
         { error: 'Contact ID is required' },
