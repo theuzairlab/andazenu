@@ -49,7 +49,10 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     const formattedOrder = {
       ...order,
       totalAmount: parseFloat(order.totalAmount.toString()),
-      orderItems: order.orderItems.map(item => ({
+      orderItems: order.orderItems.map((item: {
+        price: number | string ; // Use the correct type here based on what your database returns
+        // Include any other properties that exist on the item
+      }) => ({
         ...item,
         price: parseFloat(item.price.toString()),
       })),

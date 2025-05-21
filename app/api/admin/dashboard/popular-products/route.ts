@@ -1,15 +1,17 @@
+// Add this at the top of each affected API route file
+export const dynamic = "force-dynamic";
+
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import prisma from '@/lib/prisma';
 import { formatPrice } from '@/lib/utils';
 
-// Add this at the top of each affected API route file
-export const dynamic = "force-dynamic";
+
 
 export async function GET() {
   try {
     // Check authentication from cookie
-    const cookieStore = await cookies();
+    const cookieStore = cookies();
     const authCookie = cookieStore.get('auth-server-cookie');
 
     if (!authCookie?.value) {
@@ -37,7 +39,13 @@ export async function GET() {
 
     // Get product details for the popular products
     const productDetails = await Promise.all(
-      popularProducts.map(async item => {
+      popularProducts.map(async (item: { 
+        productId: string; 
+        _sum: { 
+          quantity?: number; 
+          // Add any other properties inside _sum that you're using
+        } 
+      })=> {
         const product = await prisma.product.findUnique({
           where: { id: item.productId },
         });

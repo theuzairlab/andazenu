@@ -1,20 +1,25 @@
 export const dynamic = "force-dynamic";
+export const runtime = 'edge'; 
 
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import prisma from '@/lib/prisma';
 import { Resend } from 'resend';
 
-
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(
   req: Request,
   context: { params: { id: string } }
 ) {
+  // ✅ Only proceed if running on the server (not during build)
+  if (typeof window !== 'undefined') {
+    return NextResponse.json({ error: 'Not allowed on client' }, { status: 400 });
+  }
+
+  const resend = new Resend(process.env.RESEND_API_KEY); // ✅ moved inside handler
+
   try {
     // Check authentication from cookie
-    const cookieStore = await cookies();
+    const cookieStore = cookies();
     const authCookie = cookieStore.get('auth-server-cookie');
     
     if (!authCookie?.value) {
