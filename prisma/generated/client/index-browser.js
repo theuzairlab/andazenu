@@ -144,10 +144,10 @@ exports.Prisma.ProductScalarFieldEnum = {
   stock: 'stock',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  categoryId: 'categoryId',
   discount: 'discount',
   regularPrice: 'regularPrice',
-  sellingPrice: 'sellingPrice'
+  sellingPrice: 'sellingPrice',
+  categoryId: 'categoryId'
 };
 
 exports.Prisma.CategoryScalarFieldEnum = {
@@ -209,8 +209,8 @@ exports.Prisma.WebsiteSettingsScalarFieldEnum = {
   footerText: 'footerText',
   contactEmail: 'contactEmail',
   contactPhone: 'contactPhone',
-  socialLinks: 'socialLinks',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  socialLinks: 'socialLinks'
 };
 
 exports.Prisma.ContactScalarFieldEnum = {
