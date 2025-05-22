@@ -9,12 +9,12 @@ export const dynamic = "force-dynamic";
 async function isAdmin(): Promise<boolean> {
   try {
     const cookieStore = cookies();
-    const sessionCookie = cookieStore.get('session');
+    const authCookie = cookieStore.get('auth-server-cookie');
 
-    if (!sessionCookie?.value) return false;
+    if (!authCookie?.value) return false;
 
-    const sessionData = JSON.parse(sessionCookie.value);
-    return !!sessionData?.isAdmin;
+    const authData = JSON.parse(authCookie.value);
+    return !!authData?.user?.isAdmin;
   } catch (error) {
     console.error('Error checking admin status:', error);
     return false;

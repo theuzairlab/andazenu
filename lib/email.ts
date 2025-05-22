@@ -93,9 +93,9 @@ export async function sendOTP(email: string): Promise<{ token: string }> {
     // Generate a 6-digit OTP
     const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
 
-    // Set expiration to 10 minutes from now
+    // Set expiration to 5 minutes from now
     const expiresAt = new Date();
-    expiresAt.setMinutes(expiresAt.getMinutes() + 10);
+    expiresAt.setMinutes(expiresAt.getMinutes() + 5);
 
     // Find if there's an existing OTP token for this email
     const existingToken = await prisma.oTPToken.findFirst({
@@ -134,7 +134,7 @@ export async function sendOTP(email: string): Promise<{ token: string }> {
           <div style="background-color: #f4f4f4; padding: 12px; font-size: 24px; font-weight: bold; text-align: center; letter-spacing: 5px;">
             ${otpCode}
           </div>
-          <p>This code will expire in 10 minutes.</p>
+          <p>This code will expire in 5 minutes.</p>
           <p>If you did not place this order, please ignore this email.</p>
         </div>
       `,
