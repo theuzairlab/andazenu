@@ -95,7 +95,7 @@ export default function FeaturedProducts({
         <h2 className="text-center text-3xl font-bold mb-2">{title}</h2>
         <p className="text-center text-gray-600 mb-10">{description}</p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
           {products.map(product => (
             <div key={product.id} className="flex-shrink-0">
               <div className="mx-2 bg-gray-50 rounded-xl overflow-hidden relative">

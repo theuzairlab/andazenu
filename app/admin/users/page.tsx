@@ -25,7 +25,7 @@ const ConfirmDialog = ({ isOpen, title, message, onConfirm, onCancel }: ConfirmD
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black  opacity-80 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black opacity-80 flex items-center justify-center">
       <div className="bg-white rounded-lg shadow-xl sm:max-w-lg w-full mx-4">
         <div className="px-6 py-4">
           <div className="flex items-start">

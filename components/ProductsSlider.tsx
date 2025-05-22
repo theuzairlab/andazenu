@@ -156,7 +156,7 @@ export default function ProductsSlider({
           onMouseLeave={() => setIsHovered(false)}
         >
           <button
-            className="absolute -left-5 top-1/3 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-100 transition-colors"
+            className="absolute left-0 sm:-left-5 top-1/3 -translate-y-1/2 z-10 bg-white rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center shadow-md hover:bg-gray-100 transition-colors"
             onClick={prevSlide}
             aria-label="Previous product"
           >
@@ -166,7 +166,7 @@ export default function ProductsSlider({
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-5 h-5"
+              className="w-4 h-4 sm:w-5 sm:h-5"
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
             </svg>
@@ -258,7 +258,7 @@ export default function ProductsSlider({
           </div>
 
           <button
-            className="absolute -right-5 top-1/3 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-100 transition-colors"
+            className="absolute right-0 sm:-right-5 top-1/3 -translate-y-1/2 z-10 bg-white rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center shadow-md hover:bg-gray-100 transition-colors"
             onClick={nextSlide}
             aria-label="Next product"
           >
@@ -268,7 +268,7 @@ export default function ProductsSlider({
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-5 h-5"
+              className="w-4 h-4 sm:w-5 sm:h-5"
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
             </svg>

@@ -7,12 +7,12 @@ import prisma from '@/lib/prisma';
 // Helper function to check admin status from request
 async function isAdmin(request: NextRequest): Promise<boolean> {
   try {
-    const sessionCookie = request.cookies.get('session');
+    const sessionCookie = request.cookies.get('auth-server-cookie');
 
     if (!sessionCookie?.value) return false;
 
     const sessionData = JSON.parse(sessionCookie.value);
-    return !!sessionData?.isAdmin;
+    return !!sessionData?.user?.isAdmin;
   } catch (error) {
     console.error('Error checking admin status:', error);
     return false;

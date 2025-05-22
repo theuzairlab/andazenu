@@ -278,18 +278,18 @@ export default function Footer() {
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="flex">
+                  <div className="flex flex-col sm:flex-row">
                     <input
                       type="email"
                       value={email}
                       onChange={e => setEmail(e.target.value)}
                       placeholder="Enter your email..."
-                      className="flex-1 border border-gray-300 px-4 py-2.5 rounded-l focus:outline-none"
+                      className="flex-1 border border-gray-300 px-4 py-2.5 rounded-l sm:rounded-l-md rounded-t-md rounded-b-none sm:rounded-t-md sm:rounded-b-none focus:outline-none"
                       required
                     />
                     <button
                       type="submit"
-                      className="bg-black text-white px-6 py-2.5 rounded-r font-medium hover:bg-gray-800 transition-colors"
+                      className="bg-black text-white px-6 py-2.5 rounded-r sm:rounded-r-md rounded-b-md rounded-t-none sm:rounded-b-md sm:rounded-t-none font-medium hover:bg-gray-800 transition-colors"
                     >
                       Sign Up
                     </button>
