@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
     const collectionSlug = searchParams.get('collection');
 
     let whereClause: any = {};
-    
+
     // If categoryId is provided, use it directly
     if (categoryId) {
       whereClause.categoryId = categoryId;
