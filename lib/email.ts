@@ -26,7 +26,7 @@ export async function sendOrderConfirmation(email: string, order: any): Promise<
     const totalAmount = formatPrice(order.totalAmount || 0);
 
     const { data, error } = await resend.emails.send({
-      from: 'Andaze E Nu <onboarding@resend.dev>',
+      from: 'Andaze Nu <support@andazenu.com>',
       to: email,
       subject: `Order Confirmed #${order.id.slice(0, 8)}`,
       html: `
@@ -124,7 +124,7 @@ export async function sendOTP(email: string): Promise<{ token: string }> {
 
     // Send email with OTP
     const { data, error } = await resend.emails.send({
-      from: 'Andaze E Nu <onboarding@resend.dev>',
+      from: 'Andaze Nu <support@andazenu.com>',
       to: email,
       subject: 'Verify Your Order',
       html: `

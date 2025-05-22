@@ -47,7 +47,7 @@ export async function POST(request: Request) {
 
     // Send email with OTP
     const { data, error } = await resend.emails.send({
-      from: 'Andaze E Nu <onboarding@resend.dev>',
+      from: 'Andaze Nu <support@andazenu.com>',
       to: email,
       subject: 'Your login OTP code',
       html: `

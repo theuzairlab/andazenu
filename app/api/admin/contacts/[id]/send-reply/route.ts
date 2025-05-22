@@ -87,7 +87,7 @@ Andaz E Nu`;
     // Send reply email with comprehensive error handling
     try {
       const emailResponse = await resend.emails.send({
-        from: 'Andaz E Nu <onboarding@resend.dev>',
+        from: 'Andaz Nu <support@andazenu.com>',
         to: contact.email,
         subject: 'Thank You for Reaching Out',
         text: messageBody,

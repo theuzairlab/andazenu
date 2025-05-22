@@ -39,7 +39,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
 
       // Send email
       const emailResponse = await resend.emails.send({
-        from: 'Andaz E Nu <onboarding@resend.dev>',
+        from: 'Andaz Nu <support@andazenu.com>',
         to: contact.email,
         subject: 'Response to Your Inquiry',
         text: `Dear ${contact.name},
