@@ -133,7 +133,7 @@ export default function FeaturedProducts({
                 <div className="p-4 bg-white flex flex-col justify-center items-center">
                   <Link
                     href={`/product/${product.id}`}
-                    className="font-bold text-md mb-1 text-center hover:text-gray-700"
+                    className="font-semibold text-xs sm:text-sm mb-1 text-center hover:text-gray-700 line-clamp-2"
                   >
                     {product.title}
                   </Link>
@@ -157,7 +157,7 @@ export default function FeaturedProducts({
                           className="sr-only" // Hide the actual radio input
                         />
                         <span
-                          className={`block w-5 h-5 rounded-full ${getColorClass(color)} transition-all duration-200 
+                          className={`block w-5 h-5 border border-gray-500 p-1 rounded-full ${getColorClass(color)} transition-all duration-200 
                                 ${selectedColors[product.id] === color ? 'ring-2 ring-offset-2 ring-black scale-90' : ''}`}
                           aria-label={color}
                           style={{ backgroundColor: color }}

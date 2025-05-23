@@ -242,7 +242,7 @@ export default function ProductsSlider({
                               className="sr-only" // Hide the actual radio input
                             />
                             <span
-                              className={`block w-5 h-5 rounded-full ${getColorClass(color)} transition-all duration-200 
+                              className={`block w-5 h-5 border border-gray-600 p-1 rounded-full ${getColorClass(color)} transition-all duration-200 
                                 ${selectedColors[product.id] === color ? 'ring-2 ring-offset-2 ring-black scale-90' : ''}`}
                               aria-label={color}
                               style={{ backgroundColor: color }}

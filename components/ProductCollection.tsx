@@ -20,6 +20,8 @@ export type Product = {
   sizes?: string[];
   description?: string;
   sellingPrice: number; // Numeric value for price calculations
+  category?: string; // Optional category name
+  categorySlug?: string; // Optional category slug
 };
 
 export type ProductCollectionProps = {
@@ -197,11 +199,18 @@ export default function ProductCollection({
             <div className="absolute top-3 left-3 z-10 bg-red-500 text-white text-xs font-medium py-1 px-2 rounded">
               {product.discount}
             </div>
-
+            
             {/* Wishlist button */}
             <div className="absolute top-3 right-3 z-10 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm">
               <WishlistIcon product={ensureProductPrice(product)} size={16} />
             </div>
+            
+            {/* Category badge - only display on All Collections page */}
+            {/* {page === "All Collections" && product.category && (
+              <div className="absolute top-10 right-3 z-10 bg-blue-500 text-white text-xs font-medium py-1 px-2 rounded">
+                {product.category}
+              </div>
+            )} */}
 
             {/* Product image with hover effect */}
             <div className="w-full h-full bg-gray-200 overflow-hidden relative group cursor-pointer">
@@ -249,7 +258,7 @@ export default function ProductCollection({
                       className="sr-only" // Hide the actual radio input
                     />
                     <span
-                      className={`block w-5 h-5 rounded-full ${getColorClass(color)} transition-all duration-200 
+                      className={`block w-5 h-5 border border-gray-500 p-1 rounded-full ${getColorClass(color)} transition-all duration-200 
                                 ${selectedColors[product.id] === color ? 'ring-2 ring-offset-2 ring-black scale-90' : ''}`}
                       aria-label={color}
                       style={{ backgroundColor: color }}

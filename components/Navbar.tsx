@@ -104,6 +104,12 @@ export default function Navbar() {
                 Home
               </Link> */}
               <Link
+                href="/collection/all-collections"
+                className="text-gray-700 hover:text-black font-medium flex items-center"
+              >
+                All Collections
+              </Link>
+              <Link
                 href="/collection/mens-collection"
                 className="text-gray-700 hover:text-black font-medium flex items-center"
               >
@@ -363,6 +369,15 @@ export default function Navbar() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Home
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/collection/all-collections"
+                className="block py-2 text-gray-800 font-medium"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                All Collections
               </Link>
             </li>
             <li>

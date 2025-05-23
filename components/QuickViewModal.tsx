@@ -242,7 +242,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
             {/* Image carousel container */}
             <div
               ref={carouselRef}
-              className="relative w-full aspect-square"
+              className="relative w-full h-full"
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
@@ -252,7 +252,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                 <img
                   src={currentImage}
                   alt={product.title}
-                  className="w-full h-auto"
+                  className="w-full h-full object-cover"
                 />
               )}
 
@@ -336,7 +336,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                     onClick={() => handleColorSelect(color)}
                   >
                     <span
-                      className={`block w-9 h-9 rounded-full 
+                      className={`block w-9 h-9 border border-gray-500 p-1 rounded-full 
                                 ${selectedColor === color ? 'ring-2 ring-offset-1 ring-black' : ''}`}
                       aria-label={getColorName(color)}
                       style={{ backgroundColor: color }}

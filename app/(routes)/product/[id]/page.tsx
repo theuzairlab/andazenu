@@ -350,7 +350,7 @@ export default function ProductDetailPage() {
                         aria-label={`Select ${getColorName(color)} color`}
                       >
                         <span
-                          className={`block w-8 h-8 rounded-full 
+                          className={`block w-8 h-8 border border-gray-500 p-1 rounded-full 
                                                 ${colorSwatchSelected[color] ? 'ring-2 ring-offset-1 ring-black' : ''}`}
                           style={{ backgroundColor: color }}
                         ></span>
@@ -503,7 +503,7 @@ export default function ProductDetailPage() {
               title="You may also like"
               description="Customers who bought this item also purchased"
               products={relatedProducts}
-              viewAllPageLink="/collections/all"
+              viewAllPageLink="/collection/all-collections"
             />
           </div>
         )}

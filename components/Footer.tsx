@@ -309,8 +309,22 @@ export default function Footer() {
 
         {/* Copyright */}
         <div className="py-6">
-          <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-            <p className="text-sm text-gray-600">© 2024 Andaz E Nu. All rights reserved.</p>
+          <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div className="text-sm text-gray-600 flex flex-col sm:flex-row gap-2 items-center">
+              <p>{settings?.footerText}</p>
+              <div className="hidden sm:block">|</div>
+              <p>
+                Developed by ❤️ {' '}
+                <a 
+                  href="https://www.linkedin.com/in/uzairullah-/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:text-black transition-colors"
+                >
+                  theuzair'slab
+                </a>
+              </p>
+            </div>
             <a
               href="#top"
               className="p-2 scroll-smooth bg-black rounded-full text-white hover:bg-gray-800 transition-colors"
