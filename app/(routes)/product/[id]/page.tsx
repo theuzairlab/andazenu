@@ -182,6 +182,29 @@ export default function ProductDetailPage() {
     toast.success(`${product.title} added to cart!`);
   };
 
+  const handleBuyNow = () => {
+    if (!selectedSize) {
+      toast.error('Please select a size');
+      return;
+    }
+
+    if (!selectedColor) {
+      toast.error('Please select a color');
+      return;
+    }
+
+    // Add item to cart
+    addItem({
+      product,
+      quantity,
+      color: selectedColor,
+      size: selectedSize,
+    });
+
+    // Redirect to checkout
+    window.location.href = '/checkout';
+  };
+
   // Handle color selection - using our utility function for image mapping
   const handleColorSelect = (color: string) => {
     console.log(`Color selected: ${color}`);
@@ -419,7 +442,10 @@ export default function ProductDetailPage() {
                 </div>
               </div>
 
-              <button className="w-full h-12 bg-red-500 text-white font-medium hover:bg-red-600 transition-colors mb-8 rounded-4xl">
+              <button 
+                onClick={handleBuyNow}
+                className="w-full h-12 bg-red-500 text-white font-medium hover:bg-red-600 transition-colors mb-8 rounded-4xl"
+              >
                 Buy it now
               </button>
 

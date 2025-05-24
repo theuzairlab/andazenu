@@ -202,9 +202,36 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
   };
 
   const handleBuyNow = () => {
-    handleAddToCart();
-    // Here you would typically redirect to checkout
-    // window.location.href = "/checkout";
+    if (!product) {
+      return;
+    }
+
+    if (!selectedSize) {
+      toast.error('Please select a size');
+      return;
+    }
+
+    if (!selectedColor) {
+      toast.error('Please select a color');
+      return;
+    }
+
+    // Convert to Product type with required sellingPrice field using our utility
+    const productWithSellingPrice = ensureProductPrice(product);
+
+    // Add item to cart
+    addItem({
+      product: productWithSellingPrice,
+      quantity: quantity,
+      color: selectedColor,
+      size: selectedSize,
+    });
+
+    // Close modal
+    onClose();
+
+    // Redirect to checkout
+    window.location.href = '/checkout';
   };
 
   if (!isOpen || !product) return null;
@@ -337,7 +364,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                   >
                     <span
                       className={`block w-9 h-9 border border-gray-500 p-1 rounded-full 
-                                ${selectedColor === color ? 'ring-2 ring-offset-1 ring-black' : ''}`}
+                        ${selectedColor === color ? 'ring-2 ring-offset-1 ring-black' : ''}`}
                       aria-label={getColorName(color)}
                       style={{ backgroundColor: color }}
                     ></span>
@@ -351,29 +378,29 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
               <div className="flex items-center gap-2">
                 {/* Quantity Selector */}
                 <div className="flex items-center border border-gray-200 rounded-full w-[140px] h-12">
-                  <button
+                <button
                     className="w-12 h-full flex items-center justify-center text-gray-500 hover:text-black"
-                    onClick={decreaseQuantity}
+                  onClick={decreaseQuantity}
                     aria-label="Decrease quantity"
                   >
                     <Minus className="w-4 h-4" />
-                  </button>
+                </button>
                   <span className="flex-1 text-center font-medium">{quantity}</span>
-                  <button
+                <button
                     className="w-12 h-full flex items-center justify-center text-gray-500 hover:text-black"
-                    onClick={increaseQuantity}
+                  onClick={increaseQuantity}
                     aria-label="Increase quantity"
                   >
                     <Plus className="w-4 h-4" />
-                  </button>
-                </div>
+                </button>
+              </div>
 
                 {/* Wishlist and Compare */}
                 <div className="flex gap-3 my-4">
                   <button className="w-12 h-12 border border-gray-200 rounded-full 
                                 flex items-center justify-center hover:bg-gray-50">
                     <WishlistIcon product={ensureProductPrice(product)} size={20} />
-                  </button>
+                </button>
                 </div>
               </div>
 
@@ -385,8 +412,6 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
               >
                 Add to Cart
               </button>
-
-
 
               {/* Buy Now Button */}
               <button
