@@ -2,7 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import ClientOnly from '@/components/ClientOnly';
-import ProductCollection, { Product } from '@/components/ProductCollection';
+import ProductCollection from '@/components/ProductCollection';
+import { Product } from '@/types/product';
+import { toast } from 'react-hot-toast';
 import { createColorImageMap } from '@/lib/colorUtils';
 
 export default function MensCollectionPage() {

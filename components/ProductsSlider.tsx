@@ -6,24 +6,12 @@ import QuickViewModal from './QuickViewModal';
 import WishlistIcon from './WishlistIcon';
 import { getColorClass, getImageForColor } from '@/lib/colorUtils';
 import { ensureProductPrice } from '@/lib/priceUtils';
-
-export type products = {
-  id: number | string;
-  title: string;
-  image: string;
-  salePrice: string;
-  regularPrice: string;
-  discount: string;
-  colors: string[];
-  colorImages?: Record<string, string>;
-  sizes?: string[];
-  description?: string;
-};
+import { Product } from '@/types/product';
 
 export type ProductsSliderProps = {
   title: string;
   description: string;
-  products: products[];
+  products: Product[];
   viewAllPageLink: string;
 };
 
@@ -38,7 +26,7 @@ export default function ProductsSlider({
   const [isHovered, setIsHovered] = useState(false);
   const [selectedColors, setSelectedColors] = useState<Record<string | number, string>>({});
   const [productImages, setProductImages] = useState<Record<string | number, string>>({});
-  const [selectedProduct, setSelectedProduct] = useState<products | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Initialize selected colors and product images
@@ -116,7 +104,7 @@ export default function ProductsSlider({
     }
   };
 
-  const openQuickView = (product: products) => {
+  const openQuickView = (product: Product) => {
     setSelectedProduct(product);
     setIsModalOpen(true);
   };

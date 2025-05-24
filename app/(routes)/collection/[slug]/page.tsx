@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import ProductCollection, { Product } from '@/components/ProductCollection';
+import ProductCollection from '@/components/ProductCollection';
+import { Product } from '@/types/product';
 import { toast } from 'react-hot-toast';
 
 export default function CollectionPage() {

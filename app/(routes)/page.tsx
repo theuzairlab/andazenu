@@ -59,24 +59,36 @@ export default function Home() {
             ? ['2 - 3Y', '4 - 5Y', '6 - 7Y', '8 - 9Y', '10 - 11Y', '12 - 13Y']
             : ['S', 'M', 'L', 'XL', 'XXL'];
 
+          // Map product sizes with stock information
+          const productSizes = product.productSizes?.map((sizeObj: any) => ({
+            size: sizeObj.size,
+            stock: sizeObj.stock || 0,
+          })) || [];
+
+          // Calculate total stock
+          const totalStock = productSizes.reduce((sum: number, size: any) => sum + size.stock, 0);
+
           return {
             id: product.id,
             title: product.name,
             image: product.productColors.length > 0 ? product.productColors[0].imageUrl : '',
             salePrice: `Rs.${product.sellingPrice.toLocaleString()}`,
             regularPrice: `Rs.${product.regularPrice.toLocaleString()}`,
+            sellingPrice: product.sellingPrice,
             discount: `-${discount}%`,
             colors: product.productColors.map((colorObj: any) => colorObj.color),
             colorImages: product.productColors.reduce((acc: any, colorObj: any) => {
               acc[colorObj.color] = colorObj.imageUrl;
               return acc;
             }, {}),
-            sizes: product.sizes || defaultSizes,
+            sizes: product.productSizes?.map((sizeObj: any) => sizeObj.size) || defaultSizes,
             description:
               product.description ||
               (isKidsProduct
                 ? 'Comfortable and stylish clothing designed especially for kids. Made from soft, durable fabric perfect for active children.'
                 : 'Premium quality t-shirt with a stylish design. Made from soft, comfortable fabric perfect for everyday wear.'),
+            stock: totalStock,
+            productSizes: productSizes
           };
         });
 

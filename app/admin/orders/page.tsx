@@ -29,6 +29,7 @@ type OrderItem = {
 export default function AdminOrdersPage() {
   const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
+  const [order, setOrder] = useState<Order | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
 
@@ -60,23 +61,38 @@ export default function AdminOrdersPage() {
   // Function to update order status
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
     try {
-      const response = await fetch(`/api/admin/orders/${orderId}`, {
-        method: 'PATCH',
+      // First, get the complete order data with product information
+      const orderResponse = await fetch(`/api/admin/orders/${orderId}`);
+      const orderData = await orderResponse.json();
+
+      if (!orderResponse.ok) {
+        throw new Error(orderData.error || 'Failed to fetch order details');
+      }
+
+      // Now update the status with complete order information
+      const response = await fetch(`/api/admin/orders/${orderId}/update-status`, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ status: newStatus }),
+        body: JSON.stringify({ newStatus }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
+        if (data.code === 'INSUFFICIENT_STOCK') {
+          toast.error('Cannot update status: Insufficient stock for one or more products');
+          // Refresh orders to ensure UI is in sync
+          await fetchOrders();
+          return;
+        }
         throw new Error(data.error || 'Failed to update order status');
       }
 
-      // Update local state to reflect changes
-      setOrders(
-        orders.map(order =>
+      // Update local state
+      setOrders(prevOrders =>
+        prevOrders.map(order =>
           order.id === orderId ? { ...order, status: newStatus as Order['status'] } : order
         )
       );
@@ -85,6 +101,8 @@ export default function AdminOrdersPage() {
     } catch (error) {
       console.error('Error updating order status:', error);
       toast.error('Failed to update order status. Please try again.');
+      // Refresh orders to ensure UI is in sync
+      await fetchOrders();
     }
   };
 

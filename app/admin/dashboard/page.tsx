@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
+import { Product } from '@/types/product';
 
 // Types
 type DashboardStats = {
@@ -18,12 +19,6 @@ type Order = {
   totalAmount: number;
   status: string;
   createdAt: string;
-};
-
-type Product = {
-  id: string;
-  name: string;
-  soldCount: number;
 };
 
 export default function AdminDashboard() {
@@ -284,21 +279,32 @@ export default function AdminDashboard() {
                 {popularProducts.length === 0 ? (
                   <p className="text-gray-500 text-center">No products found</p>
                 ) : (
-                  <ul className="divide-y divide-gray-200">
-                    {popularProducts.map((product, index) => (
-                      <li key={product.id} className="py-3 flex justify-between items-center">
-                        <div className="flex items-center">
-                          <span className="bg-gray-200 text-gray-700 h-8 w-8 rounded-full flex items-center justify-center mr-3">
-                            {index + 1}
-                          </span>
-                          <span className="text-sm text-gray-700">{product.name}</span>
-                        </div>
-                        <span className="text-sm font-medium text-gray-900">
-                          {product.soldCount} sold
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead>
+                        <tr>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Product
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Stock
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {popularProducts.map((product, index) => (
+                          <tr key={product.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                              {product.title}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                              {product.stock || 0}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 )}
               </div>
             </div>

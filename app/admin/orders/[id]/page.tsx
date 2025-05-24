@@ -70,17 +70,21 @@ export default function OrderDetailPage() {
 
   const updateOrderStatus = async () => {
     try {
-      const response = await fetch(`/api/admin/orders/${orderId}`, {
-        method: 'PATCH',
+      const response = await fetch(`/api/admin/orders/${orderId}/update-status`, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ status: newStatus }),
+        body: JSON.stringify({ newStatus }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
+        if (data.code === 'INSUFFICIENT_STOCK') {
+          toast.error('Cannot update status: Insufficient stock for one or more products');
+          return;
+        }
         throw new Error(data.error || 'Failed to update order status');
       }
 

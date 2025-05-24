@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Heart } from 'lucide-react';
 import useWishlist from '@/app/stores/useWishlist';
-import { Product } from './ProductCollection';
+import { Product } from '@/types/product';
 import toast from 'react-hot-toast';
 
 interface WishlistIconProps {

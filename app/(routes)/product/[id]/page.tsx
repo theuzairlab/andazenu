@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import WishlistIcon from '@/components/WishlistIcon';
 import useWishlist from '@/app/stores/useWishlist';
-import { Product as ProductType } from '@/components/ProductCollection';
+import { Product } from '@/types/product';
 import ProductsSlider from '@/components/ProductsSlider';
 import { ChevronDown, ChevronUp, Truck, Package } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -17,7 +17,7 @@ import {
   getImageForColor,
 } from '@/lib/colorUtils';
 
-type DetailedProduct = ProductType & {
+type DetailedProduct = Product & {
   sku?: string;
   vendor?: string;
   collections?: string[];
@@ -32,7 +32,7 @@ export default function ProductDetailPage() {
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [currentImage, setCurrentImage] = useState('');
   const [quantity, setQuantity] = useState(1);
-  const [relatedProducts, setRelatedProducts] = useState<ProductType[]>([]);
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [expandedSection, setExpandedSection] = useState('description');
   const [colorSwatchSelected, setColorSwatchSelected] = useState<Record<string, boolean>>({});
   const { addItem, openCart } = useCart();
@@ -61,14 +61,16 @@ export default function ProductDetailPage() {
           regularPrice: `Rs.${productData.regularPrice.toLocaleString()}`,
           sellingPrice: productData.sellingPrice,
           discount: `-${Math.round(((productData.regularPrice - productData.sellingPrice) / productData.regularPrice) * 100)}%`,
-          // Store all color data including both color value and image URL
-          colorData: productData.productColors,
-          // Create arrays of colors for selection
           colors: productData.productColors.map((color: any) => color.color),
-          // Store the color-to-image mapping
           colorImages: colorImageMap,
           sizes: productData.productSizes.map((size: any) => size.size),
-          description: productData.description,
+          description: productData.description || '',
+          stock: productData.stock || 0,
+          productSizes: productData.productSizes.map((size: any) => ({
+            size: size.size,
+            stock: size.stock || 0
+          })),
+          // Additional fields for DetailedProduct
           sku: `HTK-TRH-${Math.floor(1000 + Math.random() * 9000)}`,
           vendor: 'Andaze E Nu',
           collections: [productData?.category?.name],
@@ -133,6 +135,13 @@ export default function ProductDetailPage() {
         // Create color-to-image mapping using our utility function
         const colorImageMap = createColorImageMap(product.productColors);
 
+        // Ensure we have sizes array
+        const sizes = product.productSizes?.map((size: any) => size.size) || ['S', 'M', 'L', 'XL'];
+        const productSizes = product.productSizes?.map((size: any) => ({
+          size: size.size,
+          stock: size.stock || 0
+        })) || sizes.map(size => ({ size, stock: 0 }));
+
         return {
           id: product.id,
           title: product.name,
@@ -142,10 +151,11 @@ export default function ProductDetailPage() {
           sellingPrice: product.sellingPrice,
           discount: `-${Math.round(((product.regularPrice - product.sellingPrice) / product.regularPrice) * 100)}%`,
           colors: product.productColors.map((color: any) => color.color),
-          // Use our utility function for color-to-image mapping
           colorImages: colorImageMap,
-          sizes: product.productSizes.map((size: any) => size.size),
-          description: product.description,
+          sizes: sizes,
+          description: product.description || '',
+          stock: product.stock || 0,
+          productSizes: productSizes
         };
       });
 

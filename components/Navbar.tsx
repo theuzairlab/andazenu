@@ -65,7 +65,6 @@ export default function Navbar() {
       setSearchQuery('');
     }
   };
-  console.log('settings', settings);
   const logoUrl = settings?.logoUrl || '/images/logo1.png';
   const siteName = settings?.siteName || 'Andaz E Nu';
   const contactPhone = settings?.contactPhone || '+92 319 6557338';
@@ -74,7 +73,7 @@ export default function Navbar() {
       {/* Announcement Bar - only shows when at top of page */}
       {isAtTop && (
         <div className="bg-black text-white py-2">
-          <div className="mx-auto px-15 flex justify-between items-center">
+          <div className="mx-auto px-10 flex justify-between items-center">
             <div className="text-sm text-center w-full md:w-auto">
               Free shipping on all orders over Rs. 5,000
             </div>

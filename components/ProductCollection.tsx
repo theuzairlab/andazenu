@@ -7,22 +7,7 @@ import QuickViewModal from './QuickViewModal';
 import WishlistIcon from './WishlistIcon';
 import { getColorClass, getImageForColor } from '@/lib/colorUtils';
 import { ensureProductPrice } from '@/lib/priceUtils';
-
-export type Product = {
-  id: string | number;
-  title: string;
-  image: string;
-  salePrice: string;
-  regularPrice: string;
-  discount: string;
-  colors: string[];
-  colorImages?: Record<string, string>; // Added colorImages to store image URLs for each color
-  sizes?: string[];
-  description?: string;
-  sellingPrice: number; // Numeric value for price calculations
-  category?: string; // Optional category name
-  categorySlug?: string; // Optional category slug
-};
+import { Product } from '@/types/product';
 
 export type ProductCollectionProps = {
   page: string;
@@ -115,7 +100,15 @@ export default function ProductCollection({
   };
 
   const openQuickView = (product: Product) => {
-    setSelectedProduct(product);
+    // Ensure the product has all required fields
+    const validProduct: Product = {
+      ...product,
+      sizes: product.sizes || [],
+      productSizes: product.productSizes || product.sizes?.map(size => ({ size, stock: 0 })) || [],
+      stock: product.stock || 0,
+      description: product.description || ''
+    };
+    setSelectedProduct(validProduct);
     setIsModalOpen(true);
   };
 
@@ -199,7 +192,7 @@ export default function ProductCollection({
             <div className="absolute top-3 left-3 z-10 bg-red-500 text-white text-xs font-medium py-1 px-2 rounded">
               {product.discount}
             </div>
-            
+
             {/* Wishlist button */}
             <div className="absolute top-3 right-3 z-10 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm">
               <WishlistIcon product={ensureProductPrice(product)} size={16} />

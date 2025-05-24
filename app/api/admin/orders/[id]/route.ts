@@ -7,9 +7,12 @@ import prisma from '@/lib/prisma';
 import { formatPrice } from '@/lib/utils';
 
 // Get a specific order
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(
+  req: Request,
+  context: { params: { id: string } }
+) {
   try {
-    // Check authentication from cookie
+    // Check authentication
     const cookieStore = await cookies();
     const authCookie = cookieStore.get('auth-server-cookie');
 
@@ -22,21 +25,17 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
-    // Get the id param - properly await it
-    const orderId = await params.id;
+    const orderId = context.params.id;
 
-    // Get order details
+    // Get order with all necessary information for stock management
     const order = await prisma.order.findUnique({
-      where: {
-        id: orderId,
-      },
+      where: { id: orderId },
       include: {
         orderItems: {
           include: {
             product: {
-              select: {
-                name: true,
-                imageUrl: true,
+              include: {
+                productSizes: true,
               },
             },
           },
@@ -48,23 +47,10 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
       return NextResponse.json({ error: 'Order not found' }, { status: 404 });
     }
 
-    // Format the order data for consistent display
-    const formattedOrder = {
-      ...order,
-      totalAmount: parseFloat(order.totalAmount.toString()),
-      orderItems: order.orderItems.map((item: {
-        price: number | string ; // Use the correct type here based on what your database returns
-        // Include any other properties that exist on the item
-      }) => ({
-        ...item,
-        price: parseFloat(item.price.toString()),
-      })),
-    };
-
-    return NextResponse.json({ order: formattedOrder });
+    return NextResponse.json({ order });
   } catch (error) {
-    console.error('Error fetching order details:', error);
-    return NextResponse.json({ error: 'Failed to fetch order details' }, { status: 500 });
+    console.error('Error fetching order:', error);
+    return NextResponse.json({ error: 'Failed to fetch order' }, { status: 500 });
   }
 }
 

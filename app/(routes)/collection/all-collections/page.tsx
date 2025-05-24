@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import ClientOnly from '@/components/ClientOnly';
-import ProductCollection, { Product } from '@/components/ProductCollection';
+import ProductCollection from '@/components/ProductCollection';
 import { createColorImageMap } from '@/lib/colorUtils';
+import { Product } from '@/types/product';
 
 export default function AllCollectionsPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -26,7 +27,7 @@ export default function AllCollectionsPage() {
         setTotalResults(data.length);
 
         // Transform the data to match the Product type
-        const formattedProducts = data.map((product: any) => {
+        const formattedProducts = data.map((product: any): Product => {
           // Calculate discount percentage
           const discount =
             product.discount ||
@@ -36,6 +37,18 @@ export default function AllCollectionsPage() {
 
           // Use our utility function to create the color-to-image mapping
           const colorImageMap = createColorImageMap(product.productColors);
+
+          // Map product sizes with stock information
+          const productSizes = product.productSizes?.map((sizeObj: any) => ({
+            size: sizeObj.size,
+            stock: sizeObj.stock || 0,
+          })) || [];
+
+          // Calculate total stock
+          const totalStock = productSizes.reduce((sum: number, size: any) => sum + size.stock, 0);
+
+          // Get sizes array
+          const sizes = productSizes.map(size => size.size);
 
           return {
             id: product.id,
@@ -47,13 +60,12 @@ export default function AllCollectionsPage() {
             discount: `-${discount}%`,
             colors: product.productColors.map((colorObj: any) => colorObj.color),
             colorImages: colorImageMap,
-            sizes: product.productSizes?.map((sizeObj: any) => sizeObj.size) || ['S', 'M', 'L', 'XL', 'XXL'],
-            description:
-              product.description ||
-              'Premium quality product with a stylish design. Made from soft, comfortable fabric perfect for everyday wear.',
-            // Include category information for filtering/display
+            sizes: sizes.length > 0 ? sizes : ['S', 'M', 'L', 'XL', 'XXL'],
+            description: product.description || 'Premium quality product with a stylish design. Made from soft, comfortable fabric perfect for everyday wear.',
             category: product.category?.name || '',
             categorySlug: product.category?.slug || '',
+            stock: totalStock,
+            productSizes: productSizes
           };
         });
 

@@ -3,8 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import useWishlist from '@/app/stores/useWishlist';
-import { Product } from '@/components/ProductCollection';
-import { products } from '@/components/ProductsSlider';
+import { Product } from '@/types/product';
 import QuickViewModal from '@/components/QuickViewModal';
 import { getColorClass, getImageForColor } from '@/lib/colorUtils';
 import { ensureProductPrice } from '@/lib/priceUtils';
@@ -27,17 +26,23 @@ export default function WishlistPage() {
   const [wishlistItems, setWishlistItems] = useState<Product[]>([]);
   const [selectedColors, setSelectedColors] = useState<Record<string | number, string>>({});
   const [productImages, setProductImages] = useState<Record<string | number, string>>({});
-  const [selectedProduct, setSelectedProduct] = useState<products | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    setWishlistItems(items);
+    // Ensure all required fields are present
+    const validItems = items.map(item => ({
+      ...item,
+      sizes: item.sizes || [],
+      productSizes: item.productSizes || []
+    }));
+    setWishlistItems(validItems);
 
     // Initialize selected colors for each product (choose first color by default)
     const initialSelectedColors: Record<string | number, string> = {};
     const initialProductImages: Record<string | number, string> = {};
 
-    items.forEach(item => {
+    validItems.forEach(item => {
       if (item.colors.length > 0) {
         initialSelectedColors[item.id] = item.colors[0];
 
@@ -54,7 +59,7 @@ export default function WishlistPage() {
     setProductImages(initialProductImages);
   }, [items]);
 
-  const openQuickView = (product: products) => {
+  const openQuickView = (product: Product) => {
     setSelectedProduct(product);
     setIsModalOpen(true);
   };

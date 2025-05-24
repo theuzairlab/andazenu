@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, TouchEvent } from 'react';
-import { products } from './ProductsSlider';
-import { Product } from './ProductCollection';
+import { Product } from '@/types/product';
 import WishlistIcon from './WishlistIcon';
 import useCart from '@/app/stores/useCart';
 import { toast } from 'react-hot-toast';
@@ -12,7 +11,7 @@ import Link from 'next/link';
 import { ChevronLeft, ChevronRight, Info, Minus, Plus, X } from 'lucide-react';
 
 type QuickViewModalProps = {
-  product: products | null;
+  product: Product | null;
   isOpen: boolean;
   onClose: () => void;
 };
@@ -27,6 +26,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
   const modalRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
   const { addItem, openCart } = useCart();
+  const [sizeStock, setSizeStock] = useState<Record<string, number>>({});
 
   // Touch handling for swipe
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -37,6 +37,32 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
 
   useEffect(() => {
     if (product) {
+      // Initialize size stock information
+      const stockInfo: Record<string, number> = {};
+      
+      // If we have specific size stock information, use that
+      if (product.productSizes && product.productSizes.length > 0) {
+        product.productSizes.forEach(size => {
+          stockInfo[size.size] = size.stock || 0;
+        });
+      } else if (product.sizes && product.stock !== undefined) {
+        // If we have total stock but no size-specific stock, distribute evenly
+        const totalStock = product.stock;
+        const stockPerSize = Math.floor(totalStock / product.sizes.length);
+        product.sizes.forEach(size => {
+          stockInfo[size] = stockPerSize;
+        });
+      }
+      
+      // Log stock info for debugging
+      console.log("Product:", product.title);
+      console.log("Stock info:", stockInfo);
+      console.log("Product sizes:", product.productSizes);
+
+      
+      
+      setSizeStock(stockInfo);
+      
       if (product.colors.length > 0) {
         setSelectedColor(product.colors[0]);
 
@@ -67,10 +93,13 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
       }
 
       if (product.sizes && product.sizes.length > 0) {
-        setSelectedSize(product.sizes[0]);
+        // Find first size that has stock
+        const firstAvailableSize = product.sizes.find(size => stockInfo[size] > 0) || product.sizes[0];
+        setSelectedSize(firstAvailableSize);
       }
     }
   }, [product]);
+
 
   useEffect(() => {
     if (product && selectedColor) {
@@ -112,6 +141,8 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
 
   const handleSizeSelect = (size: string) => {
     setSelectedSize(size);
+    // Reset quantity to 1 when changing size
+    setQuantity(1);
   };
 
   const decreaseQuantity = () => {
@@ -121,13 +152,20 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
   };
 
   const increaseQuantity = () => {
+    const maxStock = selectedSize ? sizeStock[selectedSize] : 0;
+    if (maxStock === 0) {
+      toast.error('This size is out of stock');
+      return;
+    }
+    if (quantity < maxStock) {
     setQuantity(quantity + 1);
+    } else {
+      toast.error(`Only ${maxStock} items available in stock`);
+    }
   };
 
   const handleAddToCart = () => {
-    if (!product) {
-      return;
-    }
+    if (!product) return;
 
     if (!selectedSize) {
       toast.error('Please select a size');
@@ -136,6 +174,17 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
 
     if (!selectedColor) {
       toast.error('Please select a color');
+      return;
+    }
+
+    const availableStock = sizeStock[selectedSize];
+    if (availableStock === undefined) {
+      toast.error('Stock information not available');
+      return;
+    }
+
+    if (availableStock < quantity) {
+      toast.error(`Only ${availableStock} items available in stock`);
       return;
     }
 
@@ -202,9 +251,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
   };
 
   const handleBuyNow = () => {
-    if (!product) {
-      return;
-    }
+    if (!product) return;
 
     if (!selectedSize) {
       toast.error('Please select a size');
@@ -213,6 +260,12 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
 
     if (!selectedColor) {
       toast.error('Please select a color');
+      return;
+    }
+
+    const availableStock = sizeStock[selectedSize];
+    if (availableStock < quantity) {
+      toast.error(`Only ${availableStock} items available in stock`);
       return;
     }
 
@@ -337,18 +390,30 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
             <div className="mb-5">
               <p className="font-medium mb-3 text-gray-700">Size: {selectedSize}</p>
               <div className="flex flex-wrap gap-2">
-                {sizes.map(size => (
+                {sizes.map(size => {
+                  const isOutOfStock = sizeStock[size] === 0;
+                  return (
                   <button
                     key={size}
-                    className={`px-4 py-2 border text-sm font-medium rounded 
-                              ${selectedSize === size
+                      className={`px-4 py-2 border text-sm font-medium rounded relative
+                        ${selectedSize === size
                         ? 'border-black bg-black text-white'
-                        : 'border-gray-200 hover:border-gray-400 bg-white'}`}
-                    onClick={() => handleSizeSelect(size)}
+                          : isOutOfStock
+                            ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
+                            : 'border-gray-200 hover:border-gray-400 bg-white'
+                    }`}
+                      onClick={() => !isOutOfStock && handleSizeSelect(size)}
+                      disabled={isOutOfStock}
                   >
                     {size}
+                      {isOutOfStock && (
+                        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded">
+                          Out of Stock
+                        </span>
+                      )}
                   </button>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
@@ -371,6 +436,22 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                   </button>
                 ))}
               </div>
+            </div>
+
+            {/* Product Details */}
+            <div className="border-t border-gray-200 pt-6 mb-6">
+              <ul className="space-y-3 text-sm">
+                <li className="flex">
+                  <span className="w-24 text-gray-500">Available:</span>
+                  {selectedSize ? (
+                    <span className={sizeStock[selectedSize] === 0 ? 'text-red-500' : 'text-green-500'}>
+                      {sizeStock[selectedSize] === 0 ? 'Out of Stock' : `${sizeStock[selectedSize]} in stock`}
+                    </span>
+                  ) : (
+                    <span className="text-gray-500">Select a size to check availability</span>
+                  )}
+                </li>
+              </ul>
             </div>
 
             {/* Quantity and Add to Cart */}
@@ -403,25 +484,43 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                 </button>
                 </div>
               </div>
-
-              {/* Add to Cart Button */}
-              <button
-                onClick={handleAddToCart}
-                className="flex-1 py-4 w-full bg-black text-white font-medium rounded-full 
-                            hover:bg-gray-800 transition-colors cursor-pointer"
-              >
-                Add to Cart
-              </button>
-
-              {/* Buy Now Button */}
-              <button
-                onClick={handleBuyNow}
-                className="w-full h-12 bg-red-500 text-white font-medium rounded-full 
-                          hover:bg-red-600 transition-colors cursor-pointer mt-2"
-              >
-                Buy it now
-              </button>
             </div>
+
+            {/* Add to Cart Button */}
+            <button
+              onClick={handleAddToCart}
+              disabled={!selectedSize || !selectedColor || sizeStock[selectedSize] === 0}
+              className={`flex-1 py-4 w-full font-medium rounded-full transition-colors cursor-pointer
+                ${!selectedSize || !selectedColor || sizeStock[selectedSize] === 0
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  : 'bg-black text-white hover:bg-gray-800'
+                }`}
+            >
+              {!selectedSize || !selectedColor
+                ? 'Select Options'
+                : sizeStock[selectedSize] === 0
+                  ? 'Out of Stock'
+                  : 'Add to Cart'
+              }
+            </button>
+
+            {/* Buy Now Button */}
+            <button
+              onClick={handleBuyNow}
+              disabled={!selectedSize || !selectedColor || sizeStock[selectedSize] === 0}
+              className={`w-full h-12 font-medium rounded-full transition-colors cursor-pointer mt-2
+                ${!selectedSize || !selectedColor || sizeStock[selectedSize] === 0
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  : 'bg-red-500 text-white hover:bg-red-600'
+                }`}
+            >
+              {!selectedSize || !selectedColor
+                ? 'Select Options'
+                : sizeStock[selectedSize] === 0
+                  ? 'Out of Stock'
+                  : 'Buy it now'
+              }
+            </button>
 
             {/* View Full Details */}
             <Link href={`/product/${product.id}`}

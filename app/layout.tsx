@@ -43,7 +43,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: settings?.siteName || 'Andaz E Nu - Premium T-Shirts & Apparel',
     description: 'Shop the latest collection of premium t-shirts and apparel.',
-    icons: settings?.faviconUrl ? { icon: settings.faviconUrl } : undefined,
+    icons: settings?.faviconUrl ? { icon: settings.faviconUrl } : '/favicon.ico',
     // Add Facebook domain verification meta tag using the 'other' property
     other: {
       'facebook-domain-verification': 'mi5w78rv8dtjio82vx0bzx7vi2cwls',

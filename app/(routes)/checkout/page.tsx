@@ -23,7 +23,7 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
 
   const subtotal = getTotalPrice();
-  const shipping = subtotal < 5000 ? 250 : 0;
+  const shipping = subtotal < 5000 ? 150 : 0;
   const total = subtotal + shipping;
 
   // Handle input changes
