@@ -145,25 +145,6 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
     setQuantity(1);
   };
 
-  const decreaseQuantity = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-    }
-  };
-
-  const increaseQuantity = () => {
-    const maxStock = selectedSize ? sizeStock[selectedSize] : 0;
-    if (maxStock === 0) {
-      toast.error('This size is out of stock');
-      return;
-    }
-    if (quantity < maxStock) {
-    setQuantity(quantity + 1);
-    } else {
-      toast.error(`Only ${maxStock} items available in stock`);
-    }
-  };
-
   const handleAddToCart = () => {
     if (!product) return;
 
@@ -180,11 +161,6 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
     const availableStock = sizeStock[selectedSize];
     if (availableStock === undefined) {
       toast.error('Stock information not available');
-      return;
-    }
-
-    if (availableStock < quantity) {
-      toast.error(`Only ${availableStock} items available in stock`);
       return;
     }
 
@@ -205,6 +181,64 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
     // Close modal and open cart
     onClose();
     openCart();
+  };
+
+  const handleBuyNow = () => {
+    if (!product) return;
+
+    if (!selectedSize) {
+      toast.error('Please select a size');
+      return;
+    }
+
+    if (!selectedColor) {
+      toast.error('Please select a color');
+      return;
+    }
+
+    const availableStock = sizeStock[selectedSize];
+    if (availableStock === undefined) {
+      toast.error('Stock information not available');
+      return;
+    }
+
+    // Convert to Product type with required sellingPrice field using our utility
+    const productWithSellingPrice = ensureProductPrice(product);
+
+    // Add item to cart
+    addItem({
+      product: productWithSellingPrice,
+      quantity,
+      color: selectedColor,
+      size: selectedSize,
+    });
+
+    // Close modal
+    onClose();
+
+    // Redirect to checkout
+    window.location.href = '/checkout';
+  };
+
+  // Decrease quantity
+  const decreaseQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+
+  // Increase quantity
+  const increaseQuantity = () => {
+    const maxStock = selectedSize ? sizeStock[selectedSize] : 0;
+    if (maxStock === 0) {
+      toast.error('This size is out of stock');
+      return;
+    }
+    if (quantity < maxStock) {
+      setQuantity(quantity + 1);
+    } else {
+      toast.error(`Only ${maxStock} items available in stock`);
+    }
   };
 
   // Image navigation functions
@@ -248,43 +282,6 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
     if (isRightSwipe) {
       goToPrevImage();
     }
-  };
-
-  const handleBuyNow = () => {
-    if (!product) return;
-
-    if (!selectedSize) {
-      toast.error('Please select a size');
-      return;
-    }
-
-    if (!selectedColor) {
-      toast.error('Please select a color');
-      return;
-    }
-
-    const availableStock = sizeStock[selectedSize];
-    if (availableStock < quantity) {
-      toast.error(`Only ${availableStock} items available in stock`);
-      return;
-    }
-
-    // Convert to Product type with required sellingPrice field using our utility
-    const productWithSellingPrice = ensureProductPrice(product);
-
-    // Add item to cart
-    addItem({
-      product: productWithSellingPrice,
-      quantity: quantity,
-      color: selectedColor,
-      size: selectedSize,
-    });
-
-    // Close modal
-    onClose();
-
-    // Redirect to checkout
-    window.location.href = '/checkout';
   };
 
   if (!isOpen || !product) return null;

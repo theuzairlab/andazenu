@@ -5,6 +5,7 @@ import Link from 'next/link';
 import useCart from '@/app/stores/useCart';
 import { X, Trash2, Plus, Minus } from 'lucide-react';
 import { getColorName } from '@/lib/colorUtils';
+import toast from 'react-hot-toast';
 
 const Cart = () => {
   const { items, isOpen, closeCart, removeItem, updateQuantity, getTotalItems, getTotalPrice } =
@@ -59,14 +60,22 @@ const Cart = () => {
     };
   }, [isOpen]);
 
-  // Handle quantity updates
+  // Handle quantity updates with stock validation
   const handleQuantityChange = (
     productId: string | number,
     color: string,
     size: string,
-    quantity: number
+    quantity: number,
+    availableStock: number
   ) => {
     if (quantity < 1) return; // Don't allow quantities less than 1
+    
+    // Check if requested quantity exceeds available stock
+    if (quantity > availableStock) {
+      toast.error(`Only ${availableStock} items available in stock`);
+      return;
+    }
+    
     updateQuantity(productId, color, size, quantity);
   };
 
@@ -133,93 +142,115 @@ const Cart = () => {
             </div>
           ) : (
             <div className="space-y-4">
-              {items.map((item, index) => (
-                <div
-                  key={`${item.product.id}-${item.color}-${item.size}-${index}`}
-                  className="flex border-b pb-4"
-                >
-                  {/* Product image */}
-                  <div className="w-20 h-20 flex-shrink-0 bg-gray-100 rounded overflow-hidden">
-                    <img
-                      src={item.product.colorImages?.[item.color] || item.product.image}
-                      alt={item.product.title}
-                      className="w-full h-full object-cover object-center"
-                    />
-                  </div>
+              {items.map((item, index) => {
+                // Get available stock for this item's size
+                const availableStock = item.product.productSizes?.find(
+                  s => s.size === item.size
+                )?.stock || 0;
 
-                  {/* Product details */}
-                  <div className="ml-4 flex-1">
-                    <div className="flex justify-between">
-                      <h3 className="font-medium text-sm">{item.product.title}</h3>
-                      <button
-                        onClick={() => removeItem(item.product.id, item.color, item.size)}
-                        className="text-gray-400 hover:text-red-500 transition-colors"
-                        aria-label="Remove item"
-                      >
-                        <Trash2 size={18} />
-                      </button>
+                return (
+                  <div
+                    key={`${item.product.id}-${item.color}-${item.size}-${index}`}
+                    className="flex border-b pb-4"
+                  >
+                    {/* Product image */}
+                    <div className="w-20 h-20 flex-shrink-0 bg-gray-100 rounded overflow-hidden">
+                      <img
+                        src={item.product.colorImages?.[item.color] || item.product.image}
+                        alt={item.product.title}
+                        className="w-full h-full object-cover object-center"
+                      />
                     </div>
 
-                    <div className="text-sm text-gray-500 mt-1 flex items-center gap-1">
-                      <span className="font-semibold">Color: </span>
-                      <span
-                        className="inline-block w-3 h-3 rounded-full mr-1"
-                        style={{ backgroundColor: item.color }}
-                      ></span>
-                      {getColorName(item.color)}
-                    </div>
-
-                    <div className="text-sm text-gray-500 mt-1 flex items-center gap-1">
-                    <span className="font-semibold">Size: </span> {item.size}
-                    </div>
-
-                    <div className="flex justify-between items-center mt-2">
-                      {/* Quantity selector */}
-                      <div className="flex items-center border rounded-3xl">
+                    {/* Product details */}
+                    <div className="ml-4 flex-1">
+                      <div className="flex justify-between">
+                        <h3 className="font-medium text-sm">{item.product.title}</h3>
                         <button
-                          onClick={() =>
-                            handleQuantityChange(
-                              item.product.id,
-                              item.color,
-                              item.size,
-                              item.quantity - 1
-                            )
-                          }
-                          className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-black"
-                          aria-label="Decrease quantity"
+                          onClick={() => removeItem(item.product.id, item.color, item.size)}
+                          className="text-gray-400 hover:text-red-500 transition-colors"
+                          aria-label="Remove item"
                         >
-                          <Minus size={16} />
-                        </button>
-                        <span className="w-8 text-center">{item.quantity}</span>
-                        <button
-                          onClick={() =>
-                            handleQuantityChange(
-                              item.product.id,
-                              item.color,
-                              item.size,
-                              item.quantity + 1
-                            )
-                          }
-                          className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-black"
-                          aria-label="Increase quantity"
-                        >
-                          <Plus size={16} />
+                          <Trash2 size={18} />
                         </button>
                       </div>
 
-                      {/* Price */}
-                      <div className="font-medium">
-                        {formatRupees(
-                          typeof item.product.sellingPrice === 'number'
-                            ? item.product.sellingPrice * item.quantity
-                            : parseInt(item.product.salePrice.replace(/[^0-9]/g, ''), 10) *
-                                item.quantity
-                        )}
+                      <div className="text-sm text-gray-500 mt-1 flex items-center gap-1">
+                        <span className="font-semibold">Color: </span>
+                        <span
+                          className="inline-block w-3 h-3 rounded-full mr-1"
+                          style={{ backgroundColor: item.color }}
+                        ></span>
+                        {getColorName(item.color)}
+                      </div>
+
+                      <div className="text-sm text-gray-500 mt-1 flex items-center gap-1">
+                        <span className="font-semibold">Size: </span> {item.size}
+                      </div>
+
+                      {/* Stock information */}
+                      <div className="text-sm mt-1">
+                        <span className={availableStock > 0 ? 'text-green-600' : 'text-red-600'}>
+                          {availableStock} in stock
+                        </span>
+                      </div>
+
+                      <div className="flex justify-between items-center mt-2">
+                        {/* Quantity selector */}
+                        <div className="flex items-center border rounded-3xl">
+                          <button
+                            onClick={() =>
+                              handleQuantityChange(
+                                item.product.id,
+                                item.color,
+                                item.size,
+                                item.quantity - 1,
+                                availableStock
+                              )
+                            }
+                            className={`w-8 h-8 flex items-center justify-center ${
+                              item.quantity <= 1 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500 hover:text-black'
+                            }`}
+                            disabled={item.quantity <= 1}
+                            aria-label="Decrease quantity"
+                          >
+                            <Minus size={16} />
+                          </button>
+                          <span className="w-8 text-center">{item.quantity}</span>
+                          <button
+                            onClick={() =>
+                              handleQuantityChange(
+                                item.product.id,
+                                item.color,
+                                item.size,
+                                item.quantity + 1,
+                                availableStock
+                              )
+                            }
+                            className={`w-8 h-8 flex items-center justify-center ${
+                              item.quantity >= availableStock ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500 hover:text-black'
+                            }`}
+                            disabled={item.quantity >= availableStock}
+                            aria-label="Increase quantity"
+                          >
+                            <Plus size={16} />
+                          </button>
+                        </div>
+
+                        {/* Price */}
+                        <div className="font-medium">
+                          {formatRupees(
+                            typeof item.product.sellingPrice === 'number'
+                              ? item.product.sellingPrice * item.quantity
+                              : parseInt(item.product.salePrice.replace(/[^0-9]/g, ''), 10) *
+                                  item.quantity
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>

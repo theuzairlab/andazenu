@@ -16,6 +16,7 @@ import {
   createColorImageMap,
   getImageForColor,
 } from '@/lib/colorUtils';
+import { ensureProductPrice } from '@/lib/priceUtils';
 
 type DetailedProduct = Product & {
   sku?: string;
@@ -35,6 +36,7 @@ export default function ProductDetailPage() {
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [expandedSection, setExpandedSection] = useState('description');
   const [colorSwatchSelected, setColorSwatchSelected] = useState<Record<string, boolean>>({});
+  const [sizeStock, setSizeStock] = useState<Record<string, number>>({});
   const { addItem, openCart } = useCart();
 
   // Fetch product data
@@ -78,8 +80,28 @@ export default function ProductDetailPage() {
 
         setProduct(formattedProduct);
 
+        // Initialize size stock information
+        const stockInfo: Record<string, number> = {};
+        
+        // If we have specific size stock information, use that
+        if (formattedProduct.productSizes && formattedProduct.productSizes.length > 0) {
+          formattedProduct.productSizes.forEach(size => {
+            stockInfo[size.size] = size.stock || 0;
+          });
+        } else if (formattedProduct.sizes && formattedProduct.stock !== undefined) {
+          // If we have total stock but no size-specific stock, distribute evenly
+          const totalStock = formattedProduct.stock;
+          const stockPerSize = Math.floor(totalStock / formattedProduct.sizes.length);
+          formattedProduct.sizes.forEach(size => {
+            stockInfo[size] = stockPerSize;
+          });
+        }
+        
+        setSizeStock(stockInfo);
+
         // Print the mapping for debugging
         console.log('Color to Image mapping:', colorImageMap);
+        console.log('Stock info:', stockInfo);
 
         // Set initial selections
         if (formattedProduct.colors.length > 0) {
@@ -102,7 +124,9 @@ export default function ProductDetailPage() {
         }
 
         if (formattedProduct.sizes.length > 0) {
-          setSelectedSize(formattedProduct.sizes[0]);
+          // Find first size that has stock
+          const firstAvailableSize = formattedProduct.sizes.find(size => stockInfo[size] > 0) || formattedProduct.sizes[0];
+          setSelectedSize(firstAvailableSize);
         }
 
         // Fetch related products
@@ -166,9 +190,7 @@ export default function ProductDetailPage() {
   };
 
   const handleAddToCart = () => {
-    if (!product) {
-      return;
-    }
+    if (!product) return;
 
     if (!selectedSize) {
       toast.error('Please select a size');
@@ -180,9 +202,18 @@ export default function ProductDetailPage() {
       return;
     }
 
+    const availableStock = sizeStock[selectedSize];
+    if (availableStock === undefined) {
+      toast.error('Stock information not available');
+      return;
+    }
+
+    // Convert to Product type with required sellingPrice field using our utility
+    const productWithSellingPrice = ensureProductPrice(product);
+
     // Add item to cart
     addItem({
-      product: product as any, // Type assertion to fix type issue
+      product: productWithSellingPrice,
       quantity: quantity,
       color: selectedColor,
       size: selectedSize,
@@ -190,9 +221,14 @@ export default function ProductDetailPage() {
 
     // Show success message
     toast.success(`${product.title} added to cart!`);
+    
+    // Open cart after adding item
+    openCart();
   };
 
   const handleBuyNow = () => {
+    if (!product) return;
+
     if (!selectedSize) {
       toast.error('Please select a size');
       return;
@@ -203,9 +239,18 @@ export default function ProductDetailPage() {
       return;
     }
 
+    const availableStock = sizeStock[selectedSize];
+    if (availableStock === undefined) {
+      toast.error('Stock information not available');
+      return;
+    }
+
+    // Convert to Product type with required sellingPrice field using our utility
+    const productWithSellingPrice = ensureProductPrice(product);
+
     // Add item to cart
     addItem({
-      product,
+      product: productWithSellingPrice,
       quantity,
       color: selectedColor,
       size: selectedSize,
@@ -243,7 +288,16 @@ export default function ProductDetailPage() {
 
   // Increase quantity
   const increaseQuantity = () => {
-    setQuantity(quantity + 1);
+    const maxStock = selectedSize ? sizeStock[selectedSize] : 0;
+    if (maxStock === 0) {
+      toast.error('This size is out of stock');
+      return;
+    }
+    if (quantity < maxStock) {
+      setQuantity(quantity + 1);
+    } else {
+      toast.error(`Only ${maxStock} items available in stock`);
+    }
   };
 
   const toggleSection = (section: string) => {
@@ -345,28 +399,32 @@ export default function ProductDetailPage() {
 
               {/* Size Selection */}
               <div className="mb-6">
-                {/* <div className="flex items-center gap-4 mb-2">
-                  <span className="font-medium">Size: {selectedSize}</span>
-                  <Link href="#" className="text-sm text-gray-500 underline hover:text-black">
-                    Size guide
-                  </Link>
-                </div> */}
-
                 <div className="flex flex-wrap gap-2">
                   {product.sizes &&
-                    product.sizes.map(size => (
-                      <button
-                        key={size}
-                        className={`px-4 py-2 border text-sm rounded-4xl ${
-                          selectedSize === size
-                            ? 'border-black bg-black text-white'
-                            : 'border-gray-300 hover:border-gray-500 bg-white'
-                        }`}
-                        onClick={() => setSelectedSize(size)}
-                      >
-                        {size}
-                      </button>
-                    ))}
+                    product.sizes.map(size => {
+                      const isOutOfStock = sizeStock[size] === 0;
+                      return (
+                        <button
+                          key={size}
+                          className={`px-4 py-2 border text-sm rounded-4xl relative
+                            ${selectedSize === size
+                              ? 'border-black bg-black text-white'
+                              : isOutOfStock
+                                ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
+                                : 'border-gray-300 hover:border-gray-500 bg-white'
+                            }`}
+                          onClick={() => !isOutOfStock && setSelectedSize(size)}
+                          disabled={isOutOfStock}
+                        >
+                          {size}
+                          {isOutOfStock && (
+                            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded">
+                              Out of Stock
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
                 </div>
               </div>
 
@@ -396,8 +454,11 @@ export default function ProductDetailPage() {
               <div className="grid grid-cols-12 gap-4 mb-4">
                 <div className="col-span-3 flex items-center border border-gray-300 rounded-4xl">
                   <button
-                    className="w-28 h-12 flex items-center justify-center"
+                    className={`w-28 h-12 flex items-center justify-center ${
+                      !selectedSize || !selectedColor || quantity <= 1 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500 hover:text-black'
+                    }`}
                     onClick={decreaseQuantity}
+                    disabled={!selectedSize || !selectedColor || quantity <= 1}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -420,8 +481,13 @@ export default function ProductDetailPage() {
                     className="w-full h-12 text-center border-none focus:outline-none"
                   />
                   <button
-                    className="w-28 h-12 flex items-center justify-center"
+                    className={`w-28 h-12 flex items-center justify-center ${
+                      !selectedSize || !selectedColor || (selectedSize && sizeStock[selectedSize] <= quantity)
+                        ? 'text-gray-300 cursor-not-allowed'
+                        : 'text-gray-500 hover:text-black'
+                    }`}
                     onClick={increaseQuantity}
+                    disabled={!selectedSize || !selectedColor || (selectedSize && sizeStock[selectedSize] <= quantity)}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -442,9 +508,19 @@ export default function ProductDetailPage() {
 
                 <button
                   onClick={handleAddToCart}
-                  className="col-span-8 h-12 bg-black text-white font-medium hover:bg-gray-800 transition-colors rounded-4xl cursor-pointer"
+                  disabled={!selectedSize || !selectedColor || sizeStock[selectedSize] === 0}
+                  className={`col-span-8 h-12 font-medium transition-colors rounded-4xl cursor-pointer
+                    ${!selectedSize || !selectedColor || sizeStock[selectedSize] === 0
+                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      : 'bg-black text-white hover:bg-gray-800'
+                    }`}
                 >
-                  Add to Cart
+                  {!selectedSize || !selectedColor
+                    ? 'Select Options'
+                    : sizeStock[selectedSize] === 0
+                      ? 'Out of Stock'
+                      : 'Add to Cart'
+                  }
                 </button>
 
                 <div className="w-12 h-12 border border-gray-300 rounded-4xl flex items-center justify-center hover:bg-gray-100 transition-colors">
@@ -454,9 +530,19 @@ export default function ProductDetailPage() {
 
               <button 
                 onClick={handleBuyNow}
-                className="w-full h-12 bg-red-500 text-white font-medium hover:bg-red-600 transition-colors mb-8 rounded-4xl"
+                disabled={!selectedSize || !selectedColor || sizeStock[selectedSize] === 0}
+                className={`w-full h-12 font-medium transition-colors rounded-4xl cursor-pointer mb-8
+                  ${!selectedSize || !selectedColor || sizeStock[selectedSize] === 0
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    : 'bg-red-500 text-white hover:bg-red-600'
+                  }`}
               >
-                Buy it now
+                {!selectedSize || !selectedColor
+                  ? 'Select Options'
+                  : sizeStock[selectedSize] === 0
+                    ? 'Out of Stock'
+                    : 'Buy it now'
+                }
               </button>
 
               {/* Product Details */}
@@ -464,7 +550,13 @@ export default function ProductDetailPage() {
                 <ul className="space-y-3 text-sm">
                   <li className="flex">
                     <span className="w-24 text-gray-500">Available:</span>
-                    <span>Instock</span>
+                    {selectedSize ? (
+                      <span className={sizeStock[selectedSize] === 0 ? 'text-red-500' : 'text-green-500'}>
+                        {sizeStock[selectedSize] === 0 ? 'Out of Stock' : `${sizeStock[selectedSize]} in stock`}
+                      </span>
+                    ) : (
+                      <span className="text-gray-500">Select a size to check availability</span>
+                    )}
                   </li>
                   <li className="flex">
                     <span className="w-24 text-gray-500">Vendor:</span>

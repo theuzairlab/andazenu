@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Product } from '@/types/product';
 import { ensureProductPrice, priceToNumber } from '@/lib/priceUtils';
+import toast from 'react-hot-toast';
 
 export interface CartItem {
   product: Product;
@@ -28,6 +29,7 @@ interface CartState {
   getTotalItems: () => number;
   getTotalPrice: () => number;
   getItemPrice: (item: CartItem) => number;
+  getItemQuantityInCart: (productId: string | number, color: string, size: string) => number;
 }
 
 const useCart = create<CartState>()(
@@ -36,14 +38,46 @@ const useCart = create<CartState>()(
       items: [],
       isOpen: false,
 
-      addItem: item => {
+      getItemQuantityInCart: (productId, color, size) => {
         const { items } = get();
+        const existingItem = items.find(
+          i =>
+            i.product.id === productId &&
+            i.color === color &&
+            i.size === size
+        );
+        return existingItem ? existingItem.quantity : 0;
+      },
+
+      addItem: item => {
+        const { items, getItemQuantityInCart } = get();
 
         // Ensure product has valid sellingPrice before adding to cart
         const validItem = {
           ...item,
           product: ensureProductPrice(item.product),
         };
+
+        // Get current quantity in cart for this product variant
+        const currentQuantityInCart = getItemQuantityInCart(
+          validItem.product.id,
+          validItem.color,
+          validItem.size
+        );
+
+        // Get available stock for this size
+        const availableStock = validItem.product.productSizes?.find(
+          s => s.size === validItem.size
+        )?.stock || 0;
+
+        // Calculate total quantity after adding
+        const totalQuantity = currentQuantityInCart + validItem.quantity;
+
+        // Check if total quantity exceeds available stock
+        if (totalQuantity > availableStock) {
+          toast.error(`Cannot add ${validItem.quantity} more items. Only ${availableStock - currentQuantityInCart} items available in stock.`);
+          return;
+        }
 
         // Check if the item already exists with the same color and size
         const existingItemIndex = items.findIndex(
@@ -56,7 +90,7 @@ const useCart = create<CartState>()(
         if (existingItemIndex !== -1) {
           // If item exists, update quantity
           const updatedItems = [...items];
-          updatedItems[existingItemIndex].quantity += validItem.quantity;
+          updatedItems[existingItemIndex].quantity = totalQuantity;
           set({ items: updatedItems });
         } else {
           // If item doesn't exist, add it
