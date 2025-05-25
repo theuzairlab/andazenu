@@ -7,6 +7,7 @@ import WishlistIcon from './WishlistIcon';
 import { getColorClass, getImageForColor } from '@/lib/colorUtils';
 import { ensureProductPrice } from '@/lib/priceUtils';
 import { Product } from '@/types/product';
+import ProductImageSlider from './ProductImageSlider';
 
 export type ProductsSliderProps = {
   title: string;
@@ -183,14 +184,12 @@ export default function ProductsSlider({
                     </div>
 
                     {/* Product image with hover effect */}
-                    <div className="w-full h-full bg-gray-200 overflow-hidden relative group">
-                      {productImages[product.id] && (
-                        <img
-                          src={productImages[product.id] || product.image}
-                          alt={product.title}
-                          className="w-full h-full object-cover object-center transition-transform duration-700 ease-in-out group-hover:scale-110"
-                        />
-                      )}
+                    <div className="w-full h-[400px] bg-gray-200 overflow-hidden relative group">
+                      <ProductImageSlider
+                        mainImage={product.image}
+                        colorImages={product.colorImages || {}}
+                        selectedColor={selectedColors[product.id]}
+                      />
 
                       {/* Quick View Button - appears only on image hover */}
                       <div className="absolute bottom-0 left-0 right-0 py-3 px-4 opacity-0 group-hover:opacity-100 transform translate-y-full group-hover:translate-y-0 transition duration-300">

@@ -120,9 +120,9 @@ export default function Navbar() {
               >
                 Kid&apos;s
               </Link>
-              <Link href="/custom-design" className="text-gray-700 hover:text-black font-medium">
+              {/* <Link href="/custom-design" className="text-gray-700 hover:text-black font-medium">
                 Custom Design
-              </Link>
+              </Link> */}
               <Link href="/contact" className="text-gray-700 hover:text-black font-medium">
                 Contact
               </Link>
@@ -397,7 +397,7 @@ export default function Navbar() {
                 Kids Collection
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link
                 href="/custom-design"
                 className="block py-2 text-gray-800 font-medium"
@@ -405,7 +405,7 @@ export default function Navbar() {
               >
                 Custom Design
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link
                 href="/contact"
