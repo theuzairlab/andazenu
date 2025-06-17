@@ -293,7 +293,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
     'Premium quality t-shirt with a stylish design. Made from soft, comfortable fabric perfect for everyday wear.';
 
   return (
-    <div className="fixed inset-0 z-[9999] overflow-y-auto">
+    <div className="fixed inset-0 z-[999] overflow-y-auto">
       {/* Dark overlay with click to close */}
       <div className="fixed inset-0 bg-black/70" onClick={onClose}></div>
 

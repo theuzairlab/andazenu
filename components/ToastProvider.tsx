@@ -11,7 +11,7 @@ export default function ToastProvider() {
         style: {
           background: '#fff',
           color: '#333',
-          zIndex: 99999, // 👈 Add this to ensure it's above modal
+          zIndex: 100000, // 👈 Add this to ensure it's above modal
         },
         success: {
           style: {

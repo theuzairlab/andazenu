@@ -18,7 +18,7 @@ export default function KidsCollectionPage() {
         setIsLoading(true);
         
         // First get the category ID for kids collection
-        const categoryResponse = await fetch('/api/categories?slug=kids-collection');
+        const categoryResponse = await fetch('/api/categories?slug=kids');
         const categories = await categoryResponse.json();
         
         if (!categories || categories.length === 0) {

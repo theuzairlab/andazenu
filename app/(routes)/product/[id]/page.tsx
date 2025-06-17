@@ -17,6 +17,7 @@ import {
   getImageForColor,
 } from '@/lib/colorUtils';
 import { ensureProductPrice } from '@/lib/priceUtils';
+import ProductImageSlider from '@/components/ProductImageSlider';
 
 type DetailedProduct = Product & {
   sku?: string;
@@ -375,11 +376,11 @@ export default function ProductDetailPage() {
                     {product.discount}
                   </div>
 
-                  <div className="overflow-hidden">
-                    <img
-                      src={currentImage}
-                      alt={product.title}
-                      className="w-full h-full object-cover rounded-md"
+                  <div className="overflow-hidden rounded-md h-[600px]">
+                    <ProductImageSlider
+                      mainImage={currentImage || product.image}
+                      colorImages={product.colorImages || {}}
+                      selectedColor={selectedColor}
                     />
                   </div>
                 </div>
@@ -609,7 +610,7 @@ export default function ProductDetailPage() {
                       <ul className="space-y-2 text-sm text-gray-600">
                         <li className="flex items-start">
                           <Truck size={16} className="mr-2 mt-0.5" />
-                          <span>Free shipping on orders over Rs.1000</span>
+                          <span>Free shipping on orders over Rs.5000</span>
                         </li>
                         <li className="flex items-start">
                           <Package size={16} className="mr-2 mt-0.5" />

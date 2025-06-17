@@ -316,7 +316,7 @@ export default function Footer() {
               <p>
                 Developed by ❤️ {' '}
                 <a 
-                  href="https://www.linkedin.com/in/uzairullah-/" 
+                  href="https://www.linkedin.com/in/uzairlab" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="hover:text-black transition-colors"

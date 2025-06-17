@@ -18,7 +18,7 @@ export default function MensCollectionPage() {
         setIsLoading(true);
         
         // First get the category ID for men's collection
-        const categoryResponse = await fetch('/api/categories?slug=mens-collection');
+        const categoryResponse = await fetch('/api/categories?slug=mens');
         const categories = await categoryResponse.json();
         
         if (!categories || categories.length === 0) {

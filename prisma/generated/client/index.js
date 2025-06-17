@@ -260,7 +260,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\uzair\\Desktop\\dev\\prectice_projects\\t_shirt\\prisma\\generated\\client",
+      "value": "C:\\Users\\uzair\\OneDrive\\Desktop\\dev\\prectice_projects\\t_shirt\\prisma\\generated\\client",
       "fromEnvVar": null
     },
     "config": {
@@ -274,7 +274,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\uzair\\Desktop\\dev\\prectice_projects\\t_shirt\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\uzair\\OneDrive\\Desktop\\dev\\prectice_projects\\t_shirt\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
