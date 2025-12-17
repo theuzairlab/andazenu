@@ -259,7 +259,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\uzair\\OneDrive\\Desktop\\dev\\prectice_projects\\t_shirt\\prisma\\generated\\client",
+      "value": "/vercel/sandbox/primary/prisma/generated/client",
       "fromEnvVar": null
     },
     "config": {
@@ -268,17 +268,16 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "rhel-openssl-3.0.x",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\uzair\\OneDrive\\Desktop\\dev\\prectice_projects\\t_shirt\\prisma\\schema.prisma",
+    "sourceFilePath": "/vercel/sandbox/primary/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../..",
   "clientVersion": "6.8.2",
