@@ -17,7 +17,7 @@
     "color-namer": "^1.4.0",
     "imagekit": "^6.0.0",
     "lucide-react": "^0.503.0",
-    "next": "^14.1.0",
+    "next": "14.2.35",
     "next-auth": "^4.24.11",
     "prisma": "^6.8.2",
     "react": "^18.2.0",
